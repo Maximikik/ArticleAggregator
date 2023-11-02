@@ -1,12 +1,13 @@
 ﻿using ArticleAggregator.Core;
 using ArticleAggregator.Data;
 using ArticleAggregator.Data.Entities;
+using ArticleAggregator_Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace ArticleAggregator_Repositories.Repositories;
 
-public class Repository<T> where T : class, IBaseEntity
+public class Repository<T> : IRepository<T> where T : class, IBaseEntity
 {
     private readonly ArticlesAggregatorDbContext _dbContext;
     protected readonly DbSet<T> _dbSet;
@@ -117,5 +118,10 @@ public class Repository<T> where T : class, IBaseEntity
     public async Task<int> Count()
     {
         return await _dbSet.CountAsync();
+    }
+
+    public Task Patch(Guid id, IEnumerable<PatchDto> patchDtos)
+    {
+        throw new NotImplementedException();
     }
 }

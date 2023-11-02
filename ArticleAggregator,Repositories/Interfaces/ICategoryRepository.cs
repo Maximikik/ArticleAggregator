@@ -4,5 +4,5 @@ namespace ArticleAggregator_Repositories.Interfaces;
 
 public interface ICategoryRepository : IRepository<Category>
 {
-    Task<IEnumerable<Category>> GetByName(string name);
+    Task<Category> GetByName(string name);
 }

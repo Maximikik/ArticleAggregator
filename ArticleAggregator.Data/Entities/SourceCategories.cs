@@ -1,6 +1,6 @@
 ﻿namespace ArticleAggregator.Data.Entities;
 
-public class SourceCategory : IBaseEntity
+public class SourceCategories : IBaseEntity
 {
     public Guid Id { get; set; }
     public Guid SourceId { get; set; }

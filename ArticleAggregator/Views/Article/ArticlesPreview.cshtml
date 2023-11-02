@@ -1,0 +1,19 @@
+﻿@model List<ArticleModel>
+
+@{
+    Layout = null;
+}
+
+<div class="font-monospace text-center">
+    Articles
+</div>
+
+<div>
+    @foreach(var item in Model)
+    {
+        <div>
+            @item.Title
+            <span>. Rating - @item.Rating</span>
+        </div>
+    }
+</div>

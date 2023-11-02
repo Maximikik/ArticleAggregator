@@ -2,6 +2,7 @@
 using ArticleAggregator.Data;
 using ArticleAggregator_Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using ArticleAggregator.Core;
 
 namespace ArticleAggregator_Repositories.Repositories;
 

@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ArticleAggregator,Repositories\ArticleAggregator.Repositories.csproj" />
+  </ItemGroup>
+
 </Project>
