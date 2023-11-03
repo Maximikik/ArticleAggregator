@@ -1,0 +1,31 @@
+﻿@model ArticleModel
+
+@{
+    Layout = null;
+}
+
+<div class="font-monospace text-center">
+    Articles
+</div>
+
+<div class="container text-center">
+    <form asp-controller="Article" asp-action="Create" method="post">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+                <label asp-for="Title" class="form-label">Title</label>
+                <input type="text" class="form-control" asp-for="Title">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+                <label asp-for="Rating" class="form-label">Rating</label>
+                <input type="number" class="form-control" asp-for="Rating">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 col-lg-3">
+                <input type="submit" class="btn btn-primary" value="Create" />
+            </div>
+        </div>
+    </form>
+</div>

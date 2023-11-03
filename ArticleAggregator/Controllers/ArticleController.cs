@@ -1,4 +1,5 @@
-﻿using ArticleAggregator.Models;
+﻿using ArticleAggregator.Data.Entities;
+using ArticleAggregator.Models;
 using ArticleAggregator_Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,5 +32,24 @@ public class ArticleController : Controller
         })
         .ToListAsync();
         return View(articlesList);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromForm] ArticleModel articleModel)
+    {
+        var article = new Article
+        {
+            Id = articleModel.Id,
+            Title = articleModel.Title,
+            Rating = articleModel.Rating,
+            ArticleSourceId = articleModel.ArticleSourceId,
+            ArticleSource = await _unitOfWork.SourceRepository.GetById(articleModel.ArticleSourceId, source => source)
+                ?? throw new NullReferenceException($"No source was found with ID: \"{articleModel.ArticleSourceId}\"")
+        };
+
+        await _unitOfWork.ArticleRepository.InsertOne(article);
+        await _unitOfWork.Commit();
+
+        return View();
     }
 }
