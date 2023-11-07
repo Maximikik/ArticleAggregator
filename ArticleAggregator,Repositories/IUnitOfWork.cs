@@ -6,7 +6,7 @@ namespace ArticleAggregator_Repositories;
 public interface IUnitOfWork
 {
     IRepository<Article> ArticleRepository { get; }
-    IRepository<Category> ArticleSourceRepository { get; }
+    IRepository<Category> CategoryRepository { get; }
     IRepository<Client> ClientRepository { get; }
     IRepository<Source> SourceRepository { get; }
     IRepository<SourceCategories> SourceCategoriesRepository { get; }

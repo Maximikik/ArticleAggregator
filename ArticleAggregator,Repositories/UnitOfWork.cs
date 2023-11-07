@@ -29,7 +29,7 @@ public class UnitOfWork : IUnitOfWork
 
     public IRepository<Article> ArticleRepository => _articleRepository;
 
-    public IRepository<Category> ArticleSourceRepository => _categoryRepository;
+    public IRepository<Category> CategoryRepository => _categoryRepository;
 
     public IRepository<Client> ClientRepository => _clientRepository;
 

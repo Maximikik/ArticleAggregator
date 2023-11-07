@@ -34,6 +34,15 @@ public class ArticleController : Controller
         return View(articlesList);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Create(Guid id)
+    {
+        var articleSource = await _unitOfWork.ArticleRepository.GetById(id);
+
+        return View();
+        //return RedirectToAction("ArticlesPreview");
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create([FromForm] ArticleModel articleModel)
     {
@@ -42,14 +51,13 @@ public class ArticleController : Controller
             Id = articleModel.Id,
             Title = articleModel.Title,
             Rating = articleModel.Rating,
-            ArticleSourceId = articleModel.ArticleSourceId,
-            ArticleSource = await _unitOfWork.SourceRepository.GetById(articleModel.ArticleSourceId, source => source)
-                ?? throw new NullReferenceException($"No source was found with ID: \"{articleModel.ArticleSourceId}\"")
+            ArticleSourceId = articleModel.ArticleSourceId
         };
 
         await _unitOfWork.ArticleRepository.InsertOne(article);
         await _unitOfWork.Commit();
 
-        return View();
+        //return View();
+        return RedirectToAction("ArticlesPreview");
     }
 }

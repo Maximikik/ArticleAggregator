@@ -12,6 +12,10 @@
     <form asp-controller="Article" asp-action="Create" method="post">
         <div class="row">
             <div class="col-12 col-md-6 col-lg-4">
+                <label asp-for="Title" class="form-label">Id</label>
+                <input type="text" class="form-control" asp-for="Id">
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
                 <label asp-for="Title" class="form-label">Title</label>
                 <input type="text" class="form-control" asp-for="Title">
             </div>
