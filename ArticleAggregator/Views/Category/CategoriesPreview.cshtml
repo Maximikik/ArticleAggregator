@@ -1,0 +1,19 @@
+﻿@model List<CategoryModel>
+
+@{
+    Layout = null;
+}
+
+<div class="font-monospace text-center align-self-lg-center">
+    Categories
+</div>
+
+<div>
+    @foreach (var item in Model)
+    {
+        <div>
+            @item.Name
+            <span>. Rating - @item.PositivityRating</span>
+        </div>
+    }
+</div>

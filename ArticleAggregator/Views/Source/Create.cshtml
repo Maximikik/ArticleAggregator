@@ -1,35 +1,29 @@
-﻿@model ArticleModel
+﻿@model SourceModel
 
 @{
     Layout = null;
 }
 
 <div class="font-monospace text-center">
-    Articles
+    Sources
 </div>
 
 <div class="container text-center">
-    <form asp-controller="Article" asp-action="Create" method="post">
+    <form asp-controller="Source" asp-action="Create" method="post">
         <div class="row">
             <div class="col-12 col-md-6 col-lg-4">
                 <label asp-for="Id" class="form-label">Id</label>
                 <input type="text" class="form-control" asp-for="Id">
             </div>
             <div class="col-12 col-md-6 col-lg-4">
-                <label asp-for="Title" class="form-label">Title</label>
-                <input type="text" class="form-control" asp-for="Title">
+                <label asp-for="Name" class="form-label">Name</label>
+                <input type="text" class="form-control" asp-for="Name">
             </div>
         </div>
         <div class="row">
             <div class="col-12 col-md-6 col-lg-4">
-                <label asp-for="Rating" class="form-label">Rating</label>
-                <input type="number" class="form-control" asp-for="Rating">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 col-md-6 col-lg-4">
-                <label asp-for="ArticleSourceId" class="form-label">Source Id</label>
-                <input type="text" class="form-control" asp-for="ArticleSourceId">
+                <label asp-for="Url" class="form-label">Url</label>
+                <input type="text" class="form-control" asp-for="Url">
             </div>
         </div>
         <div class="row">

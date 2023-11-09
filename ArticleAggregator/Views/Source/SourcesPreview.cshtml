@@ -1,0 +1,20 @@
+﻿@model List<SourceModel>
+
+
+@{
+    Layout = null;
+}
+
+<div class="font-monospace text-center">
+    Sources
+</div>
+
+<div>
+    @foreach (var item in Model)
+    {
+        <div>
+            @item.Name
+            <span>. Url - @item.Url</span>
+        </div>
+    }
+</div>

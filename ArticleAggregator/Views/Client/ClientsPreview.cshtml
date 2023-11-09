@@ -1,0 +1,20 @@
+﻿@model List<ClientModel>
+
+
+@{
+    Layout = null;
+}
+
+<div class="font-monospace text-center">
+    Clients
+</div>
+
+<div>
+    @foreach (var item in Model)
+    {
+        <div>
+            @item.Login
+            <span>. Id - @item.Id</span>
+        </div>
+    }
+</div>

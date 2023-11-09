@@ -1,0 +1,19 @@
+﻿@model List<SourceCategoriesModel>
+
+
+@{
+    Layout = null;
+}
+
+<div class="font-monospace text-center">
+    Categories-of-Sources
+</div>
+
+<div>
+    @foreach (var item in Model)
+    {
+        <div>
+            @item.Id
+        </div>
+    }
+</div>
