@@ -37,7 +37,7 @@ if (app.Environment.IsDevelopment())
     DbInitializer.Initialize(db);
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
