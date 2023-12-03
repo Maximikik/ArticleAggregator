@@ -4,16 +4,40 @@
     Layout = null;
 }
 
-<div class="font-monospace text-center align-self-lg-center">
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+
+<div class="font-monospace text-center">
     Categories
+    <div class="m-2">
+        <div class="btn-group text-center" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-outline-primary">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Create">Create</a>
+            </button>
+            <button type="button" class="btn btn-outline-primary">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Update">Update</a>
+            </button>
+            <button type="button" class="btn btn-outline-primary">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Delete">Delete</a>
+            </button>
+            <button type="button" class="btn btn-outline-danger">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Back</a>
+            </button>
+        </div>
+    </div>
 </div>
 
 <div>
-    @foreach (var item in Model)
-    {
-        <div>
-            @item.Name
-            <span>. Rating - @item.PositivityRating</span>
-        </div>
-    }
+    <ul class="list-group">
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item">
+                <div class="list-group-item">
+                    @item.Name
+                    <span>. Rating - @item.PositivityRating</span>
+                </div>
+            </li>
+        }
+    </ul>
 </div>

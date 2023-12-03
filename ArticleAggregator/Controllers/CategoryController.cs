@@ -31,4 +31,26 @@ public class CategoryController : Controller
         .ToListAsync();
         return View(categoriesList);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromForm] CategoryModel categoryModel)
+    {
+        var category = new Category
+        {
+            Id = categoryModel.Id,
+            Name = categoryModel.Name,
+            PositivityRating = categoryModel.PositivityRating,
+        };
+
+        await _unitOfWork.CategoryRepository.InsertOne(category);
+        await _unitOfWork.Commit();
+
+        return RedirectToAction("CategoriesPreview");
+    }
 }

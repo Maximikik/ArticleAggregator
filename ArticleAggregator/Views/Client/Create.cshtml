@@ -1,0 +1,39 @@
+﻿@model ClientModel
+
+@{
+    Layout = null;
+}
+
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+
+<div class="font-monospace text-center">
+    Clients
+</div>
+
+
+<div class="container text-center">
+    <form asp-controller="Category" asp-action="Create" method="post">
+        <div class="flex-column">
+            <div class="mb-3">
+                <label asp-for="Id" class="form-label">Id</label>
+                <input type="text" class="form-control text-center" asp-for="Id">
+            </div>
+            <div class="mb-3">
+                <label asp-for="Login" class="form-label">Login</label>
+                <input type="text" class="form-control text-center" asp-for="Login">
+            </div>
+
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Password</label>
+                <input type="password" class="form-control text-center" asp-for="Password">
+            </div>
+
+            <div class="mb-3">
+                <input type="submit" class="btn btn-primary" value="Create" />
+            </div>
+        </div>
+    </form>
+</div>

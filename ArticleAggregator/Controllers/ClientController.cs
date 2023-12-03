@@ -1,4 +1,5 @@
-﻿using ArticleAggregator.Models;
+﻿using ArticleAggregator.Data.Entities;
+using ArticleAggregator.Models;
 using ArticleAggregator_Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,5 +28,27 @@ public class ClientController : Controller
             })
             .ToListAsync();
         return View(clientsList);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromForm] ClientModel categoryModel)
+    {
+        var client = new Client
+        {
+            Id = categoryModel.Id,
+            Login = categoryModel.Login,
+            Password = categoryModel.Password,
+        };
+
+        await _unitOfWork.ClientRepository.InsertOne(client);
+        await _unitOfWork.Commit();
+
+        return RedirectToAction("ClientsPreview");
     }
 }

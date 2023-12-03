@@ -4,16 +4,28 @@ using Microsoft.EntityFrameworkCore;
 using ArticleAggregator_Repositories;
 using ArticleAggregator_Repositories.Interfaces;
 using ArticleAggregator_Repositories.Repositories;
+using Serilog.Events;
+using Serilog;
 
-const string ConnectionString = "Server=localhost\\SQLEXPRESS;Database=ArticlesAggregator;Trusted_Connection=true;Encrypt=false;TrustServerCertificate=false";
+//const string ConnectionString = "Server=localhost\\SQLEXPRESS;Database=ArticlesAggregator;Trusted_Connection=true;Encrypt=false;TrustServerCertificate=false";
+const string ConnectionString = "Data Source=SQL6031.site4now.net;Initial Catalog=db_aa223c_dbaggregator;User Id=db_aa223c_dbaggregator_admin;Password=qweasd123123";
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ArticlesAggregatorDbContext>(opt =>
                 opt.UseSqlServer(ConnectionString));
+var logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .WriteTo
+                .File("log\\log.txt", rollingInterval: RollingInterval.Day,
+                    restrictedToMinimumLevel: LogEventLevel.Information)
+                .WriteTo.Console()
+                .Enrich.FromLogContext()
 
-//builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
-//builder.Services.AddScoped<IArticleSourceRepository, ArticleSourceRepository>();
+                .CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 builder.Services.AddScoped<IRepository<Article>, Repository<Article>>();
 builder.Services.AddScoped<IRepository<Source>, Repository<Source>>();
@@ -22,7 +34,6 @@ builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 builder.Services.AddScoped<IRepository<SourceCategories>, Repository<SourceCategories>>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -37,7 +48,8 @@ if (app.Environment.IsDevelopment())
     DbInitializer.Initialize(db);
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();

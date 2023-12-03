@@ -1,0 +1,39 @@
+﻿@model CategoryModel
+
+@{
+    Layout = null;
+}
+
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+
+<div class="font-monospace text-center">
+    Articles
+</div>
+
+
+<div class="container text-center">
+    <form asp-controller="Category" asp-action="Create" method="post">
+        <div class="flex-column">
+            <div class="mb-3">
+                <label asp-for="Id" class="form-label">Id</label>
+                <input type="text" class="form-control text-center" asp-for="Id">
+            </div>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Name</label>
+                <input type="text" class="form-control text-center" asp-for="Name">
+            </div>
+
+
+            <div class="mb-3">
+                <label asp-for="PositivityRating" class="form-label">PositivityRating</label>
+                <input type="number" class="form-control text-center" asp-for="PositivityRating">
+            </div>
+
+            <div class="mb-3">
+                <input type="submit" class="btn btn-primary" value="Create" />
+            </div>
+        </div>
+    </form>
+</div>

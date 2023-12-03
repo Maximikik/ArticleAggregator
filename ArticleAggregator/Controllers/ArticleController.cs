@@ -2,6 +2,7 @@
 using ArticleAggregator.Models;
 using ArticleAggregator_Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArticleAggregator.Controllers;
@@ -35,12 +36,9 @@ public class ArticleController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Create(Guid id)
+    public async Task<IActionResult> Create()
     {
-        var articleSource = await _unitOfWork.ArticleRepository.GetById(id);
-
         return View();
-        //return RedirectToAction("ArticlesPreview");
     }
 
     [HttpPost]
@@ -58,6 +56,33 @@ public class ArticleController : Controller
         await _unitOfWork.Commit();
 
         //return View();
+        return RedirectToAction("ArticlesPreview");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete()
+    {
+        var articles = _unitOfWork.ArticleRepository.GetAll();
+
+        var model = new DeleteModel()
+        {
+            DeleteList = new List<SelectListItem>()
+        };
+
+        foreach (var item in articles)
+        {
+            model.DeleteList.Add(new SelectListItem { Text = item.Title, Value = item.Id.ToString() });
+        }
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete([FromForm] DeleteModel DeleteModel)
+    {
+        await _unitOfWork.ArticleRepository.DeleteById(DeleteModel.Selected);
+        await _unitOfWork.Commit();
+
         return RedirectToAction("ArticlesPreview");
     }
 }

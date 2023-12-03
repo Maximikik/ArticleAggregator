@@ -125,4 +125,9 @@ public class Repository<T> : IRepository<T> where T : class, IBaseEntity
     {
         throw new NotImplementedException();
     }
+
+    public IEnumerable<T> GetAll()
+    {
+        return _dbSet;
+    }
 }
