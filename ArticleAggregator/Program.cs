@@ -7,10 +7,11 @@ using ArticleAggregator_Repositories.Repositories;
 using Serilog.Events;
 using Serilog;
 
-//const string ConnectionString = "Server=localhost\\SQLEXPRESS;Database=ArticlesAggregator;Trusted_Connection=true;Encrypt=false;TrustServerCertificate=false";
-const string ConnectionString = "Data Source=SQL6031.site4now.net;Initial Catalog=db_aa223c_dbaggregator;User Id=db_aa223c_dbaggregator_admin;Password=qweasd123123";
+//const string ConnectionString = "Data Source=SQL6031.site4now.net;Initial Catalog=db_aa223c_dbaggregator;User Id=db_aa223c_dbaggregator_admin;Password=qweasd123123";
 
 var builder = WebApplication.CreateBuilder(args);
+
+var ConnectionString = builder.Configuration.GetConnectionString("Default");
 
 builder.Services.AddDbContext<ArticlesAggregatorDbContext>(opt =>
                 opt.UseSqlServer(ConnectionString));

@@ -1,4 +1,5 @@
-﻿using ArticleAggregator.Data.Entities;
+﻿using ArticleAggregator.Core;
+using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Models;
 using ArticleAggregator_Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ public class ArticleController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Create()
+    public IActionResult Create()
     {
         return View();
     }
@@ -55,12 +56,47 @@ public class ArticleController : Controller
         await _unitOfWork.ArticleRepository.InsertOne(article);
         await _unitOfWork.Commit();
 
-        //return View();
         return RedirectToAction("ArticlesPreview");
     }
 
     [HttpGet]
-    public async Task<IActionResult> Delete()
+    public async Task<IActionResult> Update()
+    {
+        var articles = _unitOfWork.ArticleRepository.GetAll();
+
+        var model = new UpdateModel()
+        {
+            UpdateList = new List<SelectListItem>()
+        };
+
+        foreach (var item in articles)
+        {
+            model.UpdateList.Add(new SelectListItem { Text = item.Title, Value = item.Id.ToString() });
+        }
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Update([FromForm] UpdateModel updateModel)
+    {
+        if (await _unitOfWork.ArticleRepository.GetByIdAsNoTracking(updateModel.Selected) != null)
+        {
+            updateModel.SelectedArticle = await _unitOfWork.ArticleRepository.GetById(updateModel.Selected);
+            await _unitOfWork.ArticleRepository.Patch(updateModel.Selected, new List<PatchDto>()
+                {
+                    //should be sure that name of property/field in model same with property name of entity
+                    new() { PropertyName = nameof(updateModel.SelectedArticle.Title), PropertyValue = updateModel.SelectedArticle.Title }
+                });
+            await _unitOfWork.Commit();
+            return RedirectToAction("ArticlesPreview");
+        }
+
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult Delete()
     {
         var articles = _unitOfWork.ArticleRepository.GetAll();
 

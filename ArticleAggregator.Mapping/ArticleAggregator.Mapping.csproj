@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Riok.Mapperly" Version="3.3.1-next.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ArticleAggregator.Core\ArticleAggregator.Core.csproj" />
+    <ProjectReference Include="..\ArticleAggregator.Data\ArticleAggregator.Data.csproj" />
+    <ProjectReference Include="..\ArticleAggregator\ArticleAggregator.csproj" />
+  </ItemGroup>
+
+</Project>

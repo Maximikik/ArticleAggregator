@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="System.ServiceModel.Syndication" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ArticleAggregator,Repositories\ArticleAggregator.Repositories.csproj" />
+    <ProjectReference Include="..\ArticleAggregator.Core\ArticleAggregator.Core.csproj" />
+    <ProjectReference Include="..\ArticleAggregator.Data.CQS\ArticleAggregator.Data.CQS.csproj" />
+    <ProjectReference Include="..\ArticleAggregator.Mapping\ArticleAggregator.Mapping.csproj" />
+  </ItemGroup>
+
+</Project>

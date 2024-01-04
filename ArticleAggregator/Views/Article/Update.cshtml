@@ -1,0 +1,39 @@
+﻿@model UpdateModel
+
+@{
+    Layout = null;   
+}
+
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+
+<form asp-controller="Article" asp-action="Delete" method="post">  
+    <div class="container text-center">
+        <label class="form-label">
+            Select item to delete
+        </label>
+        <select class="form-select" asp-items="Model.UpdateList" asp-for="Selected">
+        </select>
+        <div class="m-3 text-center">
+            <input type="submit" class="btn btn-primary" value="Update" />
+        </div>
+
+        @if(Model.Selected != Guid.Empty)
+        {
+            <div class="">
+                Old Title: @Model.SelectedArticle.Title
+            </div>
+
+            <input type="text" class="form-control" asp-for="@Model.SelectedArticle.Title" id="articleTitle">
+
+            <div class="m-3 text-center">
+                <input type="submit" class="btn btn-primary" value="Update" />
+            </div>
+        }
+
+        <button type="button" class="btn btn-outline-danger text-center btn-sm">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Back</a>
+        </button>
+    </div>
+</form>
