@@ -9,6 +9,7 @@ public interface IArticleService
     public Task<ArticleDto?> GetArticleById(Guid id);
     public Task<ArticleDto[]?> GetArticlesByName(string name);
     public Task<ArticleDto[]?> GetPositive();
+    public Task<CommentDto[]?> GetCommentsOfArticle(Guid id);
     public Task DeleteArticle(Guid id);
 
     public Task<Guid> CreateArticle(ArticleDto dto);

@@ -9,7 +9,7 @@ using ArticleAggregator_Repositories;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using ArticleAggregator.Data.CQS.Commands;
+using ArticleAggregator.Data.CQS.Articles.Commands;
 
 namespace ArticleAggregator.Api;
 

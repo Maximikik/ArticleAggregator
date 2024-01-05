@@ -25,7 +25,7 @@ public class CategoryController : Controller
         {
             Id = category.Id,
             Name = category.Name,
-            PositivityRating = category.PositivityRating
+            PositivityRating = category.Rating
         })
         .ToListAsync();
         return View(categoriesList);
@@ -44,7 +44,7 @@ public class CategoryController : Controller
         {
             Id = categoryModel.Id,
             Name = categoryModel.Name,
-            PositivityRating = categoryModel.PositivityRating,
+            Rating = categoryModel.PositivityRating,
         };
 
         await _unitOfWork.CategoryRepository.InsertOne(category);

@@ -8,5 +8,5 @@ public class Source : IBaseEntity
     public string Url { get; set; } = null!;
     public string RssUrl { get; set; } = null!;
 
-    public virtual IEnumerable<Category> Categories { get; set; }
+    public virtual IEnumerable<Article> Articles { get; set; }
 }

@@ -21,7 +21,7 @@ public class SourceController : Controller
     {
         var articlesList = await _unitOfWork.SourceRepository
             .FindBy(source => !string.IsNullOrEmpty(source.Name),
-                article => article.Categories)
+                article => article.Name)
             .Select(source => new SourceModel()
             {
                 Id = source.Id,

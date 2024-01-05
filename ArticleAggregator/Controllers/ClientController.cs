@@ -44,7 +44,7 @@ public class ClientController : Controller
         {
             Id = categoryModel.Id,
             Login = categoryModel.Login,
-            Password = categoryModel.Password,
+            PasswordHash = categoryModel.Password,
         };
 
         await _unitOfWork.ClientRepository.InsertOne(client);

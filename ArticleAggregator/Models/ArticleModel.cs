@@ -6,4 +6,5 @@ public class ArticleModel
     public string Title { get; set; } = null!;
     public double? Rating { get; set; }
     public Guid ArticleSourceId { get; set; }
+    public List<Guid> CategoriesId { get; set; }
 }

@@ -16,4 +16,14 @@
     <ProjectReference Include="..\ArticleAggregator.Mapping\ArticleAggregator.Mapping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Clients\Handlers\Commands\" />
+    <Folder Include="Clients\Handlers\Queries\" />
+    <Folder Include="Clients\Queries\" />
+    <Folder Include="Comments\Handlers\Queries\" />
+    <Folder Include="Comments\Queries\" />
+    <Folder Include="Sources\Handlers\Commands\" />
+    <Folder Include="Sources\Handlers\Queries\" />
+  </ItemGroup>
+
 </Project>

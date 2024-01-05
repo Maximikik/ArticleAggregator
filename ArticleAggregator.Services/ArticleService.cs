@@ -1,15 +1,13 @@
 ﻿using ArticleAggregator.Core;
-using ArticleAggregator.Data.CQS.Commands;
-using ArticleAggregator.Data.CQS.Queries;
+using ArticleAggregator.Data.CQS.Articles.Commands;
+using ArticleAggregator.Data.CQS.Articles.Queries;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Net.Http.Json;
 using System.ServiceModel.Syndication;
-using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace ArticleAggregator.Services;
@@ -115,5 +113,10 @@ public class ArticleService : IArticleService
                 .Select(article => _articleMapper.ArticleToArticleDto(article))
                 .ToArrayAsync();
         return articles;
+    }
+
+    public Task<CommentDto[]?> GetCommentsOfArticle(Guid id)
+    {
+        throw new NotImplementedException();
     }
 }

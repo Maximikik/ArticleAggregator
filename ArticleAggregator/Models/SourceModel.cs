@@ -6,4 +6,5 @@ public class SourceModel
     public string Name { get; set; } = null!;
     public string Url { get; set; } = null!;
     public string RssUrl { get; set; } = null!;
+    public List<Guid> Articles { get; set; } = null!;
 }

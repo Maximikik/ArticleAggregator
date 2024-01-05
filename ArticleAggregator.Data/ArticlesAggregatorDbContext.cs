@@ -9,7 +9,8 @@ public class ArticlesAggregatorDbContext : DbContext
     public DbSet<Category> Categories { get; set; }
     public DbSet<Client> Clients { get; set; }
     public DbSet<Source> Sources { get; set; }
-    public DbSet<SourceCategories> SourceCategories { get; set; }
+    public DbSet<Comment> Comments { get; set; }
+    public DbSet<Role> Roles { get; set; }
 
     public ArticlesAggregatorDbContext(DbContextOptions<ArticlesAggregatorDbContext> options)
         : base(options)

@@ -9,7 +9,6 @@ public interface IUnitOfWork
     IRepository<Category> CategoryRepository { get; }
     IRepository<Client> ClientRepository { get; }
     IRepository<Source> SourceRepository { get; }
-    IRepository<SourceCategories> SourceCategoriesRepository { get; }
 
     Task<int> Commit();
 }

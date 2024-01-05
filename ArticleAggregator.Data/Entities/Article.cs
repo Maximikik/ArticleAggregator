@@ -7,5 +7,6 @@ public class Article : IBaseEntity
     public double? Rating { get; set; }
     public Guid ArticleSourceId { get; set; }
 
-    public virtual Source ArticleSource { get; set; }
+    public virtual Source ArticleSource { get; set; } = null!;
+    public virtual List<Category> Categories { get; set; } = null!;
 }

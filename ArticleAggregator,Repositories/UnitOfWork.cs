@@ -8,15 +8,13 @@ public class UnitOfWork : IUnitOfWork
 {
     public UnitOfWork(ArticlesAggregatorDbContext dbContext,
         IRepository<Article> articleRepository, IRepository<Category> categoryRepository,
-        IRepository<Client> clientRepository, IRepository<Source> sourceRepository,
-        IRepository<SourceCategories> sourceCategoriesRepository)
+        IRepository<Client> clientRepository, IRepository<Source> sourceRepository)
     {
         _dbContext = dbContext;
         _articleRepository = articleRepository;
         _categoryRepository = categoryRepository;
         _clientRepository = clientRepository;
         _sourceRepository = sourceRepository;
-        _sourceCategoriesRepository = sourceCategoriesRepository;
     }
 
     private readonly ArticlesAggregatorDbContext _dbContext;
@@ -25,7 +23,6 @@ public class UnitOfWork : IUnitOfWork
     private readonly IRepository<Category> _categoryRepository;
     private readonly IRepository<Client> _clientRepository;
     private readonly IRepository<Source> _sourceRepository;
-    private readonly IRepository<SourceCategories> _sourceCategoriesRepository;
 
     public IRepository<Article> ArticleRepository => _articleRepository;
 
@@ -35,7 +32,6 @@ public class UnitOfWork : IUnitOfWork
 
     public IRepository<Source> SourceRepository => _sourceRepository;
 
-    public IRepository<SourceCategories> SourceCategoriesRepository => _sourceCategoriesRepository;
 
     public async Task<int> Commit()
     {
