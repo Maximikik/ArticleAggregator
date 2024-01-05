@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ArticleAggregator.Core;
+using MediatR;
 
-namespace ArticleAggregator.Data.CQS.Sources.Commands
+namespace ArticleAggregator.Data.CQS.Sources.Commands;
+
+public class CreateSourceCommand : IRequest
 {
-    internal class CreateSourceCommand
-    {
-    }
+    public SourceDto SourceDto { get; set; }
 }

@@ -22,8 +22,6 @@
     <Folder Include="Clients\Queries\" />
     <Folder Include="Comments\Handlers\Queries\" />
     <Folder Include="Comments\Queries\" />
-    <Folder Include="Sources\Handlers\Commands\" />
-    <Folder Include="Sources\Handlers\Queries\" />
   </ItemGroup>
 
 </Project>

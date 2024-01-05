@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ArticleAggregator.Data.Entities;
+using MediatR;
 
-namespace ArticleAggregator.Data.CQS.Sources.Queries
-{
-    internal class GetAllSourcesQuery
-    {
-    }
-}
+namespace ArticleAggregator.Data.CQS.Sources.Queries;
+
+public class GetAllSourcesQuery : IRequest<List<Source>>
+{ }

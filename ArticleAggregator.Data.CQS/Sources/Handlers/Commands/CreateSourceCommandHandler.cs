@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArticleAggregator.Data.CQS.Sources.Commands
+namespace ArticleAggregator.Data.CQS.Sources.Handlers.Commands
 {
-    internal class DeleteSourceCommand
+    internal class CreateSourceCommandHandler
     {
     }
 }

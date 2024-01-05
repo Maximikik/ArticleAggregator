@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ArticleAggregator.Data.Entities;
+using MediatR;
 
-namespace ArticleAggregator.Data.CQS.Sources.Queries
+namespace ArticleAggregator.Data.CQS.Sources.Queries;
+
+public class GetArticlesOfSourceByNameQuery : IRequest<List<Article>>
 {
-    internal class GetArticlesOfSourceByNameQuery
-    {
-    }
+    public string Name { get; set; } = null!;
 }
