@@ -1,42 +1,94 @@
 ﻿using ArticleAggregator.Core;
+using ArticleAggregator.Data.CQS.Categories.Commands;
+using ArticleAggregator.Data.CQS.Categories.Queries;
+using ArticleAggregator.Data.CQS.Roles.Commands;
+using ArticleAggregator.Data.CQS.Roles.Queries;
+using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
+using ArticleAggregator_Repositories;
+using MediatR;
+using Microsoft.Extensions.Configuration;
 
 namespace ArticleAggregator.Services;
 
 public class RoleService : IRoleService
 {
-    public Task<Guid?> CreateRole(RoleDto roleDto)
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly RoleMapper _roleMapper;
+    private readonly IMediator _mediator;
+    private readonly IConfiguration _configuration;
+    public RoleService(IUnitOfWork unitOfWork,
+      RoleMapper roleMapper, IMediator mediator, IConfiguration configuration)
     {
-        throw new NotImplementedException();
+        _unitOfWork = unitOfWork;
+        _roleMapper = roleMapper;
+        _mediator = mediator;
+        _configuration = configuration;
     }
 
-    public Task DeleteRoleById(Guid id)
+    public async Task CreateRole(RoleDto roleDto)
     {
-        throw new NotImplementedException();
+        var command = new CreateRoleCommand() { RoleDto = roleDto };
+        
+        await _mediator.Send(command);
     }
 
-    public Task DeleteRoleByName(string name)
+    public async Task DeleteRoleById(Guid id)
     {
-        throw new NotImplementedException();
+        var command = new DeleteRoleByIdCommand() { Id = id };
+
+        await _mediator.Send(command);
     }
 
-    public Task<RoleDto[]?> GetAllRoles()
+    public async Task DeleteRoleByName(string name)
     {
-        throw new NotImplementedException();
+        var command = new DeleteRoleByNameCommand() { Name = name };
+
+        await _mediator.Send(command);
     }
 
-    public Task<RoleDto?> GetRoleById(Guid id)
+    public async Task<RoleDto[]?> GetAllRoles()
     {
-        throw new NotImplementedException();
+        var roles = await _mediator.Send(new GetAllRolesQuery());
+
+        var rolesDto = new RoleDto[roles.Count()];
+
+        roles.ForEach(role =>
+        {
+            rolesDto[roles.IndexOf(role)] = _roleMapper.RoleToRoleDto(role);
+        });
+
+        return rolesDto;
     }
 
-    public Task<RoleDto?> GetRoleByName(string name)
+    public async Task<RoleDto?> GetRoleById(Guid id)
     {
-        throw new NotImplementedException();
+        var command = new GetRoleByIdQuery() { Id = id };
+
+        var role = await _mediator.Send(command);
+        var roleDto = _roleMapper.RoleToRoleDto(role);
+
+        return roleDto;
     }
 
-    public Task<Guid?> UpdateRoleById(Guid id)
+    public async Task<RoleDto?> GetRoleByName(string name)
     {
-        throw new NotImplementedException();
+        var command = new GetRoleByNameQuery() { Name = name };
+
+        var role = await _mediator.Send(command);
+        var roleDto = _roleMapper.RoleToRoleDto(role);
+
+        return roleDto;
+    }
+
+    public async Task UpdateRoleById(Guid id, string name)
+    {
+        var command = new UpdateRoleByIdCommand
+        {
+            Id = id,
+            Name = name
+        };
+
+        await _mediator.Send(command);
     }
 }

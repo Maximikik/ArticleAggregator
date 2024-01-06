@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArticleAggregator.Data.CQS.Articles.Handlers.Queries;
 
-public class GetArticlesByIdQueryHandler : IRequestHandler<GetArticleByIdQuery, Article>
+public class GetArticleByIdQueryHandler : IRequestHandler<GetArticleByIdQuery, Article>
 {
     private readonly ArticlesAggregatorDbContext _dbContext;
 
-    public GetArticlesByIdQueryHandler(ArticlesAggregatorDbContext dbContext)
+    public GetArticleByIdQueryHandler(ArticlesAggregatorDbContext dbContext)
     {
         _dbContext = dbContext;
     }

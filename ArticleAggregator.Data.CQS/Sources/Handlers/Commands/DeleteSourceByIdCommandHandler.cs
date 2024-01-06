@@ -1,12 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ArticleAggregator.Data.CQS.Sources.Commands;
+using ArticleAggregator.Mapping;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
-namespace ArticleAggregator.Data.CQS.Sources.Handlers.Commands
+namespace ArticleAggregator.Data.CQS.Sources.Handlers.Commands;
+
+public class DeleteSourceByIdCommandHandler : IRequestHandler<DeleteSourceByIdCommand>
 {
-    internal class DeleteSourceByIdCommandHandler
+    private readonly ArticlesAggregatorDbContext _dbContext;
+
+    public DeleteSourceByIdCommandHandler(ArticlesAggregatorDbContext dbContext)
     {
+        _dbContext = dbContext;
+    }
+    public async Task Handle(DeleteSourceByIdCommand request, CancellationToken cancellationToken)
+    {
+        var sourceToDelete = await _dbContext.Sources.FirstOrDefaultAsync(source => source.Id.Equals(request.Id), cancellationToken)
+            ?? throw new Exception();
+
+        _dbContext.Sources.Remove(sourceToDelete);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

@@ -1,42 +1,111 @@
 ﻿using ArticleAggregator.Core;
+using ArticleAggregator.Data.CQS.Categories.Commands;
+using ArticleAggregator.Data.CQS.Roles.Commands;
+using ArticleAggregator.Data.CQS.Roles.Queries;
+using ArticleAggregator.Data.CQS.Sources.Commands;
+using ArticleAggregator.Data.CQS.Sources.Queries;
+using ArticleAggregator.Data.Entities;
+using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
+using ArticleAggregator_Repositories;
+using MediatR;
+using Microsoft.Extensions.Configuration;
 
 namespace ArticleAggregator.Services;
 
-public class SourceService : ISourcesService
+public class SourceService : ISourceService
 {
-    public Task<Guid> CreateSource(SourceDto dto)
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly SourceMapper _sourceMapper;
+    private readonly ArticleMapper _articleMapper;
+    private readonly IMediator _mediator;
+    private readonly IConfiguration _configuration;
+    public SourceService(IUnitOfWork unitOfWork,
+      SourceMapper sourceMapper, ArticleMapper articleMapper, IMediator mediator, IConfiguration configuration)
     {
-        throw new NotImplementedException();
+        _unitOfWork = unitOfWork;
+        _sourceMapper = sourceMapper;
+        _articleMapper = articleMapper;
+        _mediator = mediator;
+        _configuration = configuration;
     }
 
-    public Task DeleteSource(Guid id)
+    public async Task CreateSource(SourceDto soruceDto)
     {
-        throw new NotImplementedException();
+        var command = new CreateSourceCommand() { SourceDto = soruceDto };
+
+        await _mediator.Send(command);
     }
 
-    public Task<SourceDto[]?> GetAllSources()
+    public async Task DeleteSource(Guid id)
     {
-        throw new NotImplementedException();
+        var command = new DeleteCategoryByIdCommand() { Id = id };
+        await _mediator.Send(command);
     }
 
-    public Task<ArticleDto[]?> GetArticlesOfSourceById(Guid Id)
+    public async Task<SourceDto[]?> GetAllSources()
     {
-        throw new NotImplementedException();
+        var sources = await _mediator.Send(new GetAllSourcesQuery());
+
+        var sourcesDto = new SourceDto[sources.Count()];
+
+        sources.ForEach(source =>
+        {
+            sourcesDto[sources.IndexOf(source)] = _sourceMapper.SourceToSourceDto(source);
+        });
+
+        return sourcesDto;
     }
 
-    public Task<ArticleDto[]?> GetArticlesOfSourceByName(string name)
+    public async Task<ArticleDto[]?> GetArticlesOfSourceById(Guid id)
     {
-        throw new NotImplementedException();
+        var command = new GetArticlesOfSourceByIdQuery() { Id = id };
+
+        var articles = await _mediator.Send(command);
+
+        var articlesDto = new ArticleDto[articles.Count()];
+
+        articles.ForEach(article =>
+        {
+            articlesDto[articles.IndexOf(article)] = _articleMapper.ArticleToArticleDto(article);
+        });
+
+        return articlesDto;
     }
 
-    public Task<SourceDto?> GetSourceById(Guid id)
+    public async Task<ArticleDto[]?> GetArticlesOfSourceByName(string name)
     {
-        throw new NotImplementedException();
+        var command = new GetArticlesOfSourceByNameQuery() { Name = name };
+
+        var articles = await _mediator.Send(command);
+
+        var articlesDto = new ArticleDto[articles.Count()];
+
+        articles.ForEach(article =>
+        {
+            articlesDto[articles.IndexOf(article)] = _articleMapper.ArticleToArticleDto(article);
+        });
+
+        return articlesDto;
     }
 
-    public Task<SourceDto[]?> GetSourceByName(string name)
+    public async Task<SourceDto?> GetSourceById(Guid id)
     {
-        throw new NotImplementedException();
+        var command = new GetSourceByIdQuery() { Id = id };
+
+        var source = await _mediator.Send(command);
+        var sourceDto = _sourceMapper.SourceToSourceDto(source);
+
+        return sourceDto;
+    }
+
+    public async Task<SourceDto?> GetSourceByName(string name)
+    {
+        var command = new GetSourceByNameQuery() { Name = name };
+
+        var source = await _mediator.Send(command);
+        var sourceDto = _sourceMapper.SourceToSourceDto(source);
+
+        return sourceDto;
     }
 }

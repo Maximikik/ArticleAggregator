@@ -1,5 +1,7 @@
 ﻿using ArticleAggregator.Core;
 using ArticleAggregator.Data.CQS.Articles.Commands;
+using ArticleAggregator.Data.CQS.Categories.Commands;
+using ArticleAggregator.Data.CQS.Categories.Queries;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;
@@ -23,31 +25,55 @@ public class CategoryService : ICategoryService
         _configuration = configuration;
     }
 
-    public async Task<Guid> CreateCategory(CategoryDto dto)
+    public async Task CreateCategory(CategoryDto dto)
     {
         var command = new CreateCategoryCommand() { CategoryDto = dto };
-        var id = command.CategoryDto.Id;
         await _mediator.Send(command);
-        return id;
     }
 
-    public Task DeleteCategoryById(Guid id)
+    public async Task DeleteCategoryById(Guid id)
     {
-        throw new NotImplementedException();
+        var command = new DeleteCategoryByIdCommand() { Id = id };
+        await _mediator.Send(command);
     }
 
-    public Task DeleteCategoryByName(string name)
+    public async Task DeleteCategoryByName(string name)
     {
-        throw new NotImplementedException();
+        var command = new DeleteCategoryByNameCommand() { Name = name };
+        await _mediator.Send(command);
     }
 
-    public Task<CategoryDto?> GetCategoryById(Guid id)
+    public async Task<CategoryDto[]?> GetAllCategories()
     {
-        throw new NotImplementedException();
+        var categories = await _mediator.Send(new GetAllCategoriesQuery());
+
+        var categoriesDto = new CategoryDto[categories.Count()];
+
+        categories.ForEach(category => 
+        {
+            categoriesDto[categories.IndexOf(category)] = _categoryMapper.CategoryToCategoryDto(category); 
+        });
+
+        return categoriesDto;
     }
 
-    public Task<CategoryDto[]?> GetCategoryByName(string name)
+    public async  Task<CategoryDto?> GetCategoryById(Guid id)
     {
-        throw new NotImplementedException();
+        var command = new GetCategoryByIdQuery() { Id = id };
+        var category = await _mediator.Send(command);
+
+        var categoryDto = _categoryMapper.CategoryToCategoryDto(category);
+
+        return categoryDto;
+    }
+
+    public async Task<CategoryDto?> GetCategoryByName(string name)
+    {
+        var command = new GetCategoryByNameQuery() { Name = name };
+        var category = await _mediator.Send(command);
+
+        var categoryDto = _categoryMapper.CategoryToCategoryDto(category);
+
+        return categoryDto;
     }
 }

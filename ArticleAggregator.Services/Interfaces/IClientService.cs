@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace ArticleAggregator.Services.Interfaces;
 
-public interface IClientsService
+public interface IClientService
 {
     public Task<int> RegisterUser(ClientDto clientDto);
     bool IsUserExists(string email);

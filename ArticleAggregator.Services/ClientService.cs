@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace ArticleAggregator.Services;
 
-public class ClientService : IClientsService
+public class ClientService : IClientService
 {
     public Task<ClaimsIdentity> Authenticate(string userName)
     {

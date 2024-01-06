@@ -1,6 +1,4 @@
-﻿using ArticleAggregator.Data.CQS.Comments.Commands;
-using ArticleAggregator.Data.CQS.Roles.Commands;
-using ArticleAggregator.Data.Entities;
+﻿using ArticleAggregator.Data.CQS.Roles.Commands;
 using ArticleAggregator.Mapping;
 using MediatR;
 

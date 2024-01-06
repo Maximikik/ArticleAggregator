@@ -32,6 +32,8 @@ builder.Services.AddScoped<IRepository<Article>, Repository<Article>>();
 builder.Services.AddScoped<IRepository<Source>, Repository<Source>>();
 builder.Services.AddScoped<IRepository<Client>, Repository<Client>>();
 builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
+builder.Services.AddScoped<IRepository<Comment>, Repository<Comment>>();
+builder.Services.AddScoped<IRepository<Role>, Repository<Role>>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllersWithViews();

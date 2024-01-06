@@ -19,7 +19,7 @@ public class AddCommentToArticleCommandHandler : IRequestHandler<AddCommentToArt
 
     public async Task Handle(AddCommentToArticleCommand request, CancellationToken cancellationToken)
     {
-        var comment = _mapper.CommentDtoToComment(request.Comment);
+        var comment = _mapper.CommentDtoToComment(request.CommentDto);
 
         await _dbContext.Comments.AddAsync(comment, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
