@@ -1,4 +1,5 @@
-﻿using ArticleAggregator.Data.CQS.Roles.Commands;
+﻿using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.CQS.Roles.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,7 @@ public class UpdateRoleByIdCommandHandler : IRequestHandler<UpdateRoleByIdComman
     public async Task Handle(UpdateRoleByIdCommand request, CancellationToken cancellationToken)
     {
         var role = await _dbContext.Roles.FirstOrDefaultAsync(role => role.Id.Equals(request.Id), cancellationToken)
-            ?? throw new Exception();
+            ?? throw new NotFoundException("Category", request.Id);
 
         role.Name = request.Name;
         await _dbContext.SaveChangesAsync(cancellationToken);

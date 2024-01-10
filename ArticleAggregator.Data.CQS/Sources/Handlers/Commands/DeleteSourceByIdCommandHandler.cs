@@ -1,4 +1,5 @@
-﻿using ArticleAggregator.Data.CQS.Sources.Commands;
+﻿using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.CQS.Sources.Commands;
 using ArticleAggregator.Mapping;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ public class DeleteSourceByIdCommandHandler : IRequestHandler<DeleteSourceByIdCo
     public async Task Handle(DeleteSourceByIdCommand request, CancellationToken cancellationToken)
     {
         var sourceToDelete = await _dbContext.Sources.FirstOrDefaultAsync(source => source.Id.Equals(request.Id), cancellationToken)
-            ?? throw new Exception();
+            ?? throw new NotFoundException("Source", request.Id);
 
         _dbContext.Sources.Remove(sourceToDelete);
         await _dbContext.SaveChangesAsync(cancellationToken);

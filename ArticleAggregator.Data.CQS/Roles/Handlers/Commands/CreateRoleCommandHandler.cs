@@ -1,4 +1,5 @@
-﻿using ArticleAggregator.Data.CQS.Roles.Commands;
+﻿using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.CQS.Roles.Commands;
 using ArticleAggregator.Mapping;
 using MediatR;
 
@@ -18,6 +19,8 @@ public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand>
 
     public async Task Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
+        _ = request.RoleDto ?? throw new NotFoundException("Role");
+
         var role = _mapper.RoleDtoToRole(request.RoleDto);
 
         await _dbContext.Roles.AddAsync(role, cancellationToken);

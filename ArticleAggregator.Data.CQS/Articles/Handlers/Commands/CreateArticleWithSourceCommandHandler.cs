@@ -1,4 +1,5 @@
 ﻿using ArticleAggregator.Data.CQS.Articles.Commands;
+using ArticleAggregator.Data.CQS.CustomExceptions;
 using ArticleAggregator.Data.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ public class CreateArticleWithSourceCommandHandler : IRequestHandler<CreateArtic
 
         if (!isSourceExists)
         {
-            throw new Exception(); // add custom exception
+            throw new NotFoundException("Source", request.ArticleSourceId);
         }
 
         var article = new Article

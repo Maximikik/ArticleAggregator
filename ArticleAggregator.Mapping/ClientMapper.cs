@@ -12,4 +12,7 @@ public partial class ClientMapper
     public partial Client ClientDtoToClient(ClientDto clientDto);
     public partial ClientModel ClientDtoToClientModel(ClientDto clientDto);
     public partial ClientDto ClientModelToClientDto(CategoryModel clientModel);
+
+    public partial ClientDto RegisterModelToClientDto(RegisterModel model);
+    public partial ClientDto LoginModelToUserDto(LoginModel model);
 }

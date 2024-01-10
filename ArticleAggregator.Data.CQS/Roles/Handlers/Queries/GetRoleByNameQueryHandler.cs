@@ -1,4 +1,5 @@
-﻿using ArticleAggregator.Data.CQS.Roles.Queries;
+﻿using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.CQS.Roles.Queries;
 using ArticleAggregator.Data.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,6 @@ public class GetRoleByNameQueryHandler : IRequestHandler<GetRoleByNameQuery, Rol
     public async Task<Role> Handle(GetRoleByNameQuery request, CancellationToken cancellationToken)
     {
         return await _dbContext.Roles.FirstOrDefaultAsync(role => role.Name.Equals(request.Name), cancellationToken)
-            ?? throw new Exception();
+            ?? throw new NotFoundException("Role", request.Name);
     }
 }

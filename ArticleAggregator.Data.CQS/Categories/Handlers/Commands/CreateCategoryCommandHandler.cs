@@ -1,5 +1,5 @@
-﻿using ArticleAggregator.Data.CQS.Articles.Commands;
-using ArticleAggregator.Data.CQS.Categories.Commands;
+﻿using ArticleAggregator.Data.CQS.Categories.Commands;
+using ArticleAggregator.Data.CQS.CustomExceptions;
 using ArticleAggregator.Mapping;
 using MediatR;
 
@@ -19,6 +19,8 @@ public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryComman
 
     public async Task Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
+        _ = request.CategoryDto ?? throw new NotFoundException("Category");
+
         var category = _mapper.CategoryDtoToCategory(request.CategoryDto);
         await _dbContext.Categories.AddAsync(category, cancellationToken);
 

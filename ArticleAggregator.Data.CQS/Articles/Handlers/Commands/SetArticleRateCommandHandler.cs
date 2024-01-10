@@ -1,4 +1,5 @@
 ﻿using ArticleAggregator.Data.CQS.Articles.Commands;
+using ArticleAggregator.Data.CQS.CustomExceptions;
 using ArticleAggregator.Mapping;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ public class SetArticleRateCommandHandler : IRequestHandler<SetArticleRateComman
     public async Task Handle(SetArticleRateCommand request, CancellationToken cancellationToken)
     {
         var article = await _dbContext.Articles.FirstOrDefaultAsync(article => article.Id.Equals(request.Id), cancellationToken)
-            ?? throw new Exception(); // add NotFoundException or smth
+            ?? throw new NotFoundException("Article", request.Id);
 
         article.Rating = request.Rate;
 

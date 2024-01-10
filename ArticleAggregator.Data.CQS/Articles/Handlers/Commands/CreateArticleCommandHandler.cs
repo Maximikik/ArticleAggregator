@@ -1,4 +1,5 @@
 ﻿using ArticleAggregator.Data.CQS.Articles.Commands;
+using ArticleAggregator.Data.CQS.CustomExceptions;
 using ArticleAggregator.Mapping;
 using MediatR;
 
@@ -17,6 +18,8 @@ public class CreateArticleCommandHandler : IRequestHandler<CreateArticleCommand>
     }
     public async Task Handle(CreateArticleCommand request, CancellationToken cancellationToken)
     {
+        _ = request.ArticleDto ?? throw new NotFoundException("ArticleDto");
+
         var article = _mapper.ArticleDtoToArticle(request.ArticleDto);
         await _dbContext.Articles.AddAsync(article, cancellationToken);
 

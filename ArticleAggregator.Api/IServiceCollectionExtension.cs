@@ -20,6 +20,8 @@ using ArticleAggregator.Data.CQS.Categories.Queries;
 using ArticleAggregator.Data.CQS.Comments.Commands;
 using ArticleAggregator.Data.CQS.Articles.Handlers.Commands;
 using ArticleAggregator.Data.CQS.Articles.Handlers.Queries;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 
 namespace ArticleAggregator.Api;
 
@@ -47,6 +49,7 @@ public static class IServiceCollectionExtension
         services.AddScoped<IClientService, ClientService>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<ITokenService, TokenService>();
         //services.AddScoped<IUserService, UserService>();
 
         services.AddScoped<ArticleMapper>();
@@ -62,48 +65,39 @@ public static class IServiceCollectionExtension
             .UseRecommendedSerializerSettings()
             .UseSqlServerStorage(connectionString));
 
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "PFS.WebApi", Version = "v1" });
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter a valid token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = JwtBearerDefaults.AuthenticationScheme
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = JwtBearerDefaults.AuthenticationScheme
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+        });
+
         services.AddHangfireServer();
 
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(CreateArticleCommand).Assembly);
-            cfg.RegisterServicesFromAssembly(typeof(CreateArticleCommandHandler).Assembly);
-            cfg.RegisterServicesFromAssembly(typeof(GetArticleByIdQuery).Assembly);
-            cfg.RegisterServicesFromAssembly(typeof(GetArticleByIdQueryHandler).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(CreateArticleWithSourceCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(DeleteArticleByIdCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(InsertRssDataCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(SetArticleRateCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(UpdateArticleTextCommand).Assembly);
-
-            //cfg.RegisterServicesFromAssembly(typeof(CreateRoleCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(DeleteRoleByIdCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(DeleteRoleByNameCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(UpdateRoleByIdCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(GetAllRolesQuery).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(GetRoleByNameQuery).Assembly);
-
-            //cfg.RegisterServicesFromAssembly(typeof(CreateSourceCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(DeleteSourceByIdCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(GetAllSourcesQuery).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(GetArticlesOfSourceByIdQuery).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(GetArticlesOfSourceByNameQuery).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(GetSourceByIdQuery).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(GetSourceByNameQuery).Assembly);
-
-            //cfg.RegisterServicesFromAssembly(typeof(GetArticleByIdQuery).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(GetArticleTextQuery).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(GetAUnratedArticlesQuery).Assembly);
-
-            //cfg.RegisterServicesFromAssembly(typeof(CreateCategoryCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(DeleteCategoryByIdCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(DeleteCategoryByNameCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(GetAllCategoriesQuery).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(GetCategoryByIdQuery).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(GetCategoryByNameQuery).Assembly);
-
-            //cfg.RegisterServicesFromAssembly(typeof(AddCommentToArticleCommand).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof(RemoveCommentFromArticleCommand).Assembly);
         });
 
 

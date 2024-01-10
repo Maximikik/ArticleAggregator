@@ -1,4 +1,5 @@
-﻿using ArticleAggregator.Data.CQS.Roles.Commands;
+﻿using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.CQS.Roles.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,7 @@ public class DeleteRoleByNameCommandHandler : IRequestHandler<DeleteRoleByNameCo
     public async Task Handle(DeleteRoleByNameCommand request, CancellationToken cancellationToken)
     {
         var role = await _dbContext.Roles.FirstOrDefaultAsync(role => role.Name.Equals(request.Name), cancellationToken)
-            ?? throw new Exception();
+            ?? throw new NotFoundException("Role", request.Name);
 
         _dbContext.Roles.Remove(role);
         await _dbContext.SaveChangesAsync(cancellationToken);

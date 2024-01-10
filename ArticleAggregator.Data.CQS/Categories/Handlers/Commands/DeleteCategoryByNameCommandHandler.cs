@@ -1,4 +1,5 @@
 ﻿using ArticleAggregator.Data.CQS.Categories.Commands;
+using ArticleAggregator.Data.CQS.CustomExceptions;
 using ArticleAggregator.Mapping;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ public class DeleteCategoryByNameCommandHandler : IRequestHandler<DeleteCategory
     {
         var categoryToDelete = await _dbContext.Categories.FirstOrDefaultAsync(
             category => category.Name.Equals(request.Name), cancellationToken)
-            ?? throw new Exception();
+            ?? throw new NotFoundException("Category", request.Name);
 
         _dbContext.Categories.Remove(categoryToDelete);
         await _dbContext.SaveChangesAsync(cancellationToken);

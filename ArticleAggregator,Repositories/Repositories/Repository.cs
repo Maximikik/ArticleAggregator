@@ -126,8 +126,8 @@ public class Repository<T> : IRepository<T> where T : class, IBaseEntity
         throw new NotImplementedException();
     }
 
-    public IEnumerable<T> GetAll()
+    public async Task<List<T>> GetAll()
     {
-        return _dbSet;
+        return await _dbSet.ToListAsync();
     }
 }

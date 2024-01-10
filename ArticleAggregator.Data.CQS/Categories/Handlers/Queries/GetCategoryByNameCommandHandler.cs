@@ -1,4 +1,5 @@
 ﻿using ArticleAggregator.Data.CQS.Categories.Queries;
+using ArticleAggregator.Data.CQS.CustomExceptions;
 using ArticleAggregator.Data.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ public class GetCategoryByNameCommandHandler : IRequestHandler<GetCategoryByName
     {
         var category = await _dbContext.Categories.FirstOrDefaultAsync(
             category => category.Name.Equals(request.Name), cancellationToken)
-            ?? throw new Exception();
+            ?? throw new NotFoundException("Category", request.Name);
 
         return category;
     }

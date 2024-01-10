@@ -1,4 +1,5 @@
-﻿using ArticleAggregator.Data.CQS.Sources.Commands;
+﻿using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.CQS.Sources.Commands;
 using ArticleAggregator.Mapping;
 using MediatR;
 
@@ -17,7 +18,7 @@ public class CreateSourceCommandHandler : IRequestHandler<CreateSourceCommand>
 
     public async Task Handle(CreateSourceCommand request, CancellationToken cancellationToken)
     {
-        _ = request.SourceDto ?? throw new Exception();
+        _ = request.SourceDto ?? throw new NotFoundException("Source");
 
         var source = _sourceMapper.SourceDtoToSource(request.SourceDto);
 

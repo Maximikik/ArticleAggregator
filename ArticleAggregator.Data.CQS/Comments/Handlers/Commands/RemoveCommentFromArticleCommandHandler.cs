@@ -1,4 +1,5 @@
 ﻿using ArticleAggregator.Data.CQS.Comments.Commands;
+using ArticleAggregator.Data.CQS.CustomExceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,7 @@ public class RemoveCommentFromArticleCommandHandler : IRequestHandler<RemoveComm
     public async Task Handle(RemoveCommentFromArticleCommand request, CancellationToken cancellationToken)
     {
         var comment = await _dbContext.Comments.FirstOrDefaultAsync(comment => comment.Id.Equals(request.CommentId))
-            ?? throw new Exception();
+            ?? throw new NotFoundException("Comment", request.CommentId);
 
         _dbContext.Comments.Remove(comment);
         await _dbContext.SaveChangesAsync(cancellationToken);

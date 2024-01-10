@@ -1,4 +1,5 @@
 ﻿using ArticleAggregator.Data.CQS.Articles.Commands;
+using ArticleAggregator.Data.CQS.CustomExceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,7 @@ public class UpdateArticleTextCommandHandler : IRequestHandler<UpdateArticleText
         var articles = await _dbContext.Articles.Where(article => request.ArticlesData.Keys
              .Contains(article.Id))
              .ToListAsync(cancellationToken)
-             ?? throw new Exception(); // custom exception
+             ?? throw new NotFoundException("Articles");
 
         foreach (var article in articles)
         {

@@ -57,7 +57,7 @@ public class SourceController : Controller
     [HttpGet]
     public async Task<IActionResult> Delete()
     {
-        var sources = _unitOfWork.SourceRepository.GetAll();
+        var sources = await _unitOfWork.SourceRepository.GetAll();
 
         var model = new DeleteModel()
         {

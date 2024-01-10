@@ -62,7 +62,7 @@ public class ArticleController : Controller
     [HttpGet]
     public async Task<IActionResult> Update()
     {
-        var articles = _unitOfWork.ArticleRepository.GetAll();
+        var articles = await _unitOfWork.ArticleRepository.GetAll();
 
         var model = new UpdateModel()
         {
@@ -96,9 +96,9 @@ public class ArticleController : Controller
     }
 
     [HttpGet]
-    public IActionResult Delete()
+    public async Task<IActionResult> Delete()
     {
-        var articles = _unitOfWork.ArticleRepository.GetAll();
+        var articles = await _unitOfWork.ArticleRepository.GetAll();
 
         var model = new DeleteModel()
         {

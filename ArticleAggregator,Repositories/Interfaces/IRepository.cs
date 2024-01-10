@@ -12,7 +12,7 @@ public interface IRepository<T> where T : class, IBaseEntity
     IQueryable<T> FindBy(Expression<Func<T, bool>> wherePredicate,
         params Expression<Func<T, object>>[] includes);
     IQueryable<T> GetAsQueryable();
-    IEnumerable<T> GetAll();
+    Task<List<T>> GetAll();
 
     Task InsertOne(T entity);
     Task InsertMany(IEnumerable<T> entities);

@@ -1,5 +1,7 @@
 using ArticleAggregator.Api;
 using Hangfire;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 
@@ -22,7 +24,6 @@ builder.Configuration.AddJsonFile("AFINN-ru.json");
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.RegisterServices(builder.Configuration);
 

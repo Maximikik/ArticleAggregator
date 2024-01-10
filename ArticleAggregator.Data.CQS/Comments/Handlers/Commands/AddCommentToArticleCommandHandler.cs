@@ -1,4 +1,5 @@
 ﻿using ArticleAggregator.Data.CQS.Comments.Commands;
+using ArticleAggregator.Data.CQS.CustomExceptions;
 using ArticleAggregator.Mapping;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,8 @@ public class AddCommentToArticleCommandHandler : IRequestHandler<AddCommentToArt
 
     public async Task Handle(AddCommentToArticleCommand request, CancellationToken cancellationToken)
     {
+        _ = request.CommentDto ?? throw new NotFoundException("Comment");
+
         var comment = _mapper.CommentDtoToComment(request.CommentDto);
 
         await _dbContext.Comments.AddAsync(comment, cancellationToken);

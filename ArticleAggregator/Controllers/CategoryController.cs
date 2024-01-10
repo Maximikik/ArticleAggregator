@@ -56,7 +56,7 @@ public class CategoryController : Controller
     [HttpGet]
     public async Task<IActionResult> Delete()
     {
-        var categories = _unitOfWork.CategoryRepository.GetAll();
+        var categories = await _unitOfWork.CategoryRepository.GetAll();
 
         var model = new DeleteModel()
         {

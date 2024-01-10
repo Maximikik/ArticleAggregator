@@ -1,53 +1,159 @@
 ﻿using ArticleAggregator.Core;
+using ArticleAggregator.Data.CQS.Clients.Queries;
+using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.Entities;
+using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
+using ArticleAggregator_Repositories;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace ArticleAggregator.Services;
 
 public class ClientService : IClientService
 {
-    public Task<ClaimsIdentity> Authenticate(string userName)
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IConfiguration _configuration;
+    private readonly ClientMapper _clientMapper;
+    private readonly IMediator _mediator;
+
+
+    public ClientService(IUnitOfWork unitOfWork, IConfiguration configuration, ClientMapper clientMapper,
+        IMediator mediator)
     {
-        throw new NotImplementedException();
+        _unitOfWork = unitOfWork;
+        _configuration = configuration;
+        _clientMapper = clientMapper;
+        _mediator = mediator;
     }
 
-    public Task<Guid> CreateClient(ClientDto dto)
+    public async Task<ClaimsIdentity> Authenticate(string userName)
     {
-        throw new NotImplementedException();
+        var client = await _unitOfWork.ClientRepository
+            .FindBy(login => login.Login.Equals(userName))
+            .FirstOrDefaultAsync()
+            ?? throw new NotFoundException("Client", userName);
+
+        var roleName = (await _unitOfWork.RoleRepository.GetByIdAsNoTracking(client.RoleId))?.Name;
+
+        var claims = new List<Claim>()
+        {
+            new Claim(ClaimsIdentity.DefaultNameClaimType, client.Login),
+            new Claim(ClaimsIdentity.DefaultRoleClaimType, roleName!)
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims,
+            "AplicationCookie",
+            ClaimsIdentity.DefaultNameClaimType,
+            ClaimsIdentity.DefaultRoleClaimType);
+
+        return claimsIdentity;
     }
 
-    public Task<ClientDto[]?> GetAllClients()
+    public async Task<Guid> CreateClient(ClientDto dto)
     {
-        throw new NotImplementedException();
+        _ = dto ?? throw new NotFoundException("ClientDto");
+
+        var client = _clientMapper.ClientDtoToClient(dto);
+
+        await _unitOfWork.ClientRepository.InsertOne(client);
+        await _unitOfWork.Commit();
+
+        return client.Id;
     }
 
-    public Task<ClientDto?> GetClientById(Guid id)
+    public async Task<ClientDto[]?> GetAllClients()
     {
-        throw new NotImplementedException();
+        var clients = await _unitOfWork.ClientRepository.GetAll();
+
+        var clientsDto = new ClientDto[clients.Count()];
+
+        clients.ForEach(client =>
+        {
+            clientsDto[clients.IndexOf(client)] = _clientMapper.ClientToClientDto(client);
+        });
+
+        return clientsDto;
     }
 
-    public Task<ClientDto?> GetClientByLogin(string login)
+    public async Task<ClientDto?> GetClientById(Guid id)
     {
-        throw new NotImplementedException();
+        var client = await _unitOfWork.ClientRepository.FindBy(client => client.Id.Equals(id))
+            .FirstOrDefaultAsync() ?? throw new NotFoundException("Client", id);
+
+        var clientDto = _clientMapper.ClientToClientDto(client);
+
+        return clientDto;
     }
 
-    public Task<bool> IsAdmin(string email)
+    public async Task<ClientDto?> GetClientByLogin(string login)
     {
-        throw new NotImplementedException();
+        var client = await _unitOfWork.ClientRepository.FindBy(client => client.Login.Equals(login))
+            .FirstOrDefaultAsync() ?? throw new NotFoundException("Client", login);
+
+        var clientDto = _clientMapper.ClientToClientDto(client);
+
+        return clientDto;
     }
 
-    public Task<bool> IsPasswordCorrect(string email, string password)
+    public async Task<ClientDto> GetClientByRefreshToken(Guid refreshToken)
     {
-        throw new NotImplementedException();
+        var user = await _mediator.Send(new GetUserByRefreshTokenQuery { RefreshTokenId = refreshToken });
+
+        var dto = _clientMapper.ClientToClientDto(user);
+        return dto;
     }
 
-    public bool IsUserExists(string email)
+    public async Task<bool> IsAdmin(string email)
     {
-        throw new NotImplementedException();
+        return (await _unitOfWork.ClientRepository.FindBy(client => client.Login.Equals(email))
+            .FirstOrDefaultAsync())?.Role.Name.Equals("Admin") ?? false;
     }
 
-    public Task<int> RegisterUser(ClientDto clientDto)
+    public async Task<bool> IsPasswordCorrect(string email, string password)
     {
-        throw new NotImplementedException();
+        var currentPasswordHash = (await _unitOfWork.ClientRepository.FindBy(client => client.Login.Equals(email))
+            .FirstOrDefaultAsync())?.PasswordHash;
+
+        var enteredPasswordHash = GenerateMd5Hash(password);
+
+        return currentPasswordHash?.Equals(enteredPasswordHash) ?? false;
+    }
+
+    public async Task<bool> IsUserExists(string email)
+    {
+        return await _unitOfWork.ClientRepository.FindBy(client => client.Login.Equals(email)).AnyAsync();
+    }
+
+    public async Task RegisterUser(ClientDto clientDto)
+    {
+        var clientRole = await _unitOfWork.RoleRepository.FindBy(role => role.Name.Equals("User")).FirstOrDefaultAsync();
+
+        var client = new Client
+        {
+            Id = Guid.NewGuid(),
+            Login = clientDto.Login,
+            PasswordHash = GenerateMd5Hash(clientDto.PasswordHash),
+            RoleId = clientDto.RoleId
+        };
+
+        await _unitOfWork.ClientRepository.InsertOne(client);
+
+        await _unitOfWork.Commit();
+    }
+
+    private string GenerateMd5Hash(string input)
+    {
+        using (var md5 = MD5.Create())
+        {
+            var salt = _configuration["AppSettings:PasswordSalt"];
+            var inputBytes = System.Text.Encoding.UTF8.GetBytes($"{input}{salt}");
+            var hashBytes = md5.ComputeHash(inputBytes);
+
+            return Convert.ToHexString(hashBytes);
+        }
     }
 }

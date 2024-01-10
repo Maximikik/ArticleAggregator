@@ -17,9 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Clients\Commands\" />
     <Folder Include="Clients\Handlers\Commands\" />
-    <Folder Include="Clients\Handlers\Queries\" />
-    <Folder Include="Clients\Queries\" />
     <Folder Include="Comments\Handlers\Queries\" />
     <Folder Include="Comments\Queries\" />
   </ItemGroup>

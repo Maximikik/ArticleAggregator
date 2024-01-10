@@ -1,4 +1,5 @@
 ﻿using ArticleAggregator.Data.CQS.Articles.Queries;
+using ArticleAggregator.Data.CQS.CustomExceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ public class GetArticleTextQueryHandler : IRequestHandler<GetArticleTextQuery, s
         var article = await _dbContext.Articles
             .FirstOrDefaultAsync(article1 => article1.Id.Equals(request.Id),
                 cancellationToken: cancellationToken)
-            ?? throw new Exception();
+            ?? throw new NotFoundException("Article", request.Id);
 
         return article.Title;
 

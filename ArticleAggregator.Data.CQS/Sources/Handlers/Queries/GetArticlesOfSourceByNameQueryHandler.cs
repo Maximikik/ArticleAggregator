@@ -1,4 +1,5 @@
-﻿using ArticleAggregator.Data.CQS.Sources.Queries;
+﻿using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.CQS.Sources.Queries;
 using ArticleAggregator.Data.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,7 @@ internal class GetArticlesOfSourceByNameQueryHandler : IRequestHandler<GetArticl
     public async Task<List<Article>> Handle(GetArticlesOfSourceByNameQuery request, CancellationToken cancellationToken)
     {
         var source = await _dbContext.Sources.FirstOrDefaultAsync(source => source.Name.Equals(request.Name), cancellationToken)
-            ?? throw new Exception();
+            ?? throw new NotFoundException("Source", request.Name);
 
         return source.Articles;
     }

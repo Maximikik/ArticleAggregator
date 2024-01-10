@@ -56,7 +56,7 @@ public class ClientController : Controller
     [HttpGet]
     public async Task<IActionResult> Delete()
     {
-        var clients = _unitOfWork.ClientRepository.GetAll();
+        var clients = await _unitOfWork.ClientRepository.GetAll();
 
         var model = new DeleteModel()
         {
