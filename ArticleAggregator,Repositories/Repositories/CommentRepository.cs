@@ -8,9 +8,9 @@ public class CommentRepository : Repository<Comment>, ICommentRepository
 {
     private readonly ArticlesAggregatorDbContext _dbContext;
 
-    public CommentRepository(ArticlesAggregatorDbContext dbContext) 
+    public CommentRepository(ArticlesAggregatorDbContext dbContext)
         : base(dbContext)
-    { 
+    {
     }
 
     public async Task AddCommentToArticle(Comment comment, Article article)

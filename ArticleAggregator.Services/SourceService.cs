@@ -1,10 +1,7 @@
 ﻿using ArticleAggregator.Core;
 using ArticleAggregator.Data.CQS.Categories.Commands;
-using ArticleAggregator.Data.CQS.Roles.Commands;
-using ArticleAggregator.Data.CQS.Roles.Queries;
 using ArticleAggregator.Data.CQS.Sources.Commands;
 using ArticleAggregator.Data.CQS.Sources.Queries;
-using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;

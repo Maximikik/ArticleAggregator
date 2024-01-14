@@ -1,27 +1,18 @@
-﻿using ArticleAggregator.Data.Entities;
-using ArticleAggregator.Data;
+﻿using ArticleAggregator.Data;
+using ArticleAggregator.Data.CQS.Articles.Commands;
+using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
-using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator.Services;
+using ArticleAggregator.Services.Interfaces;
+using ArticleAggregator_Repositories;
 using ArticleAggregator_Repositories.Interfaces;
 using ArticleAggregator_Repositories.Repositories;
-using ArticleAggregator_Repositories;
 using Hangfire;
-using Microsoft.EntityFrameworkCore;
-using System.Data;
-using ArticleAggregator.Data.CQS.Articles.Commands;
-using ArticleAggregator.Data.CQS.Roles.Commands;
-using ArticleAggregator.Data.CQS.Roles.Queries;
-using ArticleAggregator.Data.CQS.Sources.Commands;
-using ArticleAggregator.Data.CQS.Sources.Queries;
-using ArticleAggregator.Data.CQS.Articles.Queries;
-using ArticleAggregator.Data.CQS.Categories.Commands;
-using ArticleAggregator.Data.CQS.Categories.Queries;
-using ArticleAggregator.Data.CQS.Comments.Commands;
-using ArticleAggregator.Data.CQS.Articles.Handlers.Commands;
-using ArticleAggregator.Data.CQS.Articles.Handlers.Queries;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace ArticleAggregator.Api;
 
@@ -50,7 +41,6 @@ public static class IServiceCollectionExtension
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<ITokenService, TokenService>();
-        //services.AddScoped<IUserService, UserService>();
 
         services.AddScoped<ArticleMapper>();
         services.AddScoped<CategoryMapper>();
@@ -99,7 +89,35 @@ public static class IServiceCollectionExtension
         {
             cfg.RegisterServicesFromAssembly(typeof(CreateArticleCommand).Assembly);
         });
+    }
+
+    public static void ConfigureJwt
+        (this IServiceCollection services, IConfiguration configuration)
+    {
+        var issuer = configuration["Jwt:Issuer"];
+        var audience = configuration["Jwt:Audience"];
+        var secret = configuration["Jwt:Secret"]!;
 
 
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = issuer,
+                    ValidAudience = audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
+
+                };
+            });
+        //services.AddAuthorization(options =>
+        //{
+        //    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+        //    options.AddPolicy("User", policy => policy.RequireRole("User"));
+        //});
     }
 }

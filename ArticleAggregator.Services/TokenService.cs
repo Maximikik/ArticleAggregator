@@ -1,5 +1,6 @@
 ﻿using ArticleAggregator.Core;
 using ArticleAggregator.Data.CQS.Clients.Queries;
+using ArticleAggregator.Data.CQS.Roles.Queries;
 using ArticleAggregator.Data.CQS.Tokens.Commands;
 using ArticleAggregator.Services.Interfaces;
 using MediatR;
@@ -44,19 +45,20 @@ public class TokenService : ITokenService
     public async Task<string> GenerateJwtToken(ClientDto clientDto)
     {
         _ = int.TryParse(_configuration["Jwt:Lifetime"], out var lifetime);
-        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]);
+        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]!);
         var issuer = _configuration["Jwt:Issuer"];
         var audience = _configuration["Jwt:Audience"];
+
+        var clientRole = await _mediator.Send(new GetRoleByIdQuery { Id = clientDto.RoleId });
 
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
                 new Claim(ClaimTypes.Name, clientDto.Login),
-                new Claim(ClaimTypes.Role, "User"),//todo add correct role
-                new Claim("aud",audience),
-                new Claim("iss",issuer)
-                //...
+                new Claim(ClaimTypes.Role, clientRole.Name),
+                new Claim("Audience",audience!),
+                new Claim("Issuer",issuer!)
             }),
             Expires = DateTime.UtcNow.AddMinutes(lifetime),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)

@@ -1,8 +1,8 @@
-﻿using ArticleAggregator.Data.CQS.Queries;
+﻿using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.CQS.Queries;
 using ArticleAggregator.Data.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ArticleAggregator.Data.CQS.CustomExceptions;
 
 namespace ArticleAggregator.Data.CQS.QueryHandlers;
 

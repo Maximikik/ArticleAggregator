@@ -1,6 +1,4 @@
 ﻿using ArticleAggregator.Core;
-using ArticleAggregator.Data.CQS.Categories.Commands;
-using ArticleAggregator.Data.CQS.Categories.Queries;
 using ArticleAggregator.Data.CQS.Roles.Commands;
 using ArticleAggregator.Data.CQS.Roles.Queries;
 using ArticleAggregator.Mapping;
@@ -29,7 +27,7 @@ public class RoleService : IRoleService
     public async Task CreateRole(RoleDto roleDto)
     {
         var command = new CreateRoleCommand() { RoleDto = roleDto };
-        
+
         await _mediator.Send(command);
     }
 

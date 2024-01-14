@@ -1,7 +1,5 @@
 using ArticleAggregator.Api;
 using Hangfire;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 
@@ -26,6 +24,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.RegisterServices(builder.Configuration);
+builder.Services.ConfigureJwt(builder.Configuration);
 
 var app = builder.Build();
 
@@ -48,4 +47,3 @@ app.MapControllers();
 app.MapHangfireDashboard();
 
 app.Run();
-  

@@ -1,5 +1,4 @@
-﻿using ArticleAggregator.Core;
-using ArticleAggregator.Data;
+﻿using ArticleAggregator.Data;
 using ArticleAggregator.Data.Entities;
 using ArticleAggregator_Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +13,6 @@ public class ClientRepository : Repository<Client>, IClientRepository
 
     public async Task<Client> GetByLogin(string name)
     {
-        return await _dbSet.FirstOrDefaultAsync(article => article.Login.Equals(name)); 
+        return await _dbSet.FirstOrDefaultAsync(article => article.Login.Equals(name));
     }
 }

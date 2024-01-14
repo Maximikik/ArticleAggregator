@@ -1,8 +1,7 @@
-﻿using ArticleAggregator.Data.CQS.Tokens.Commands;
-using ArticleAggregator.Data;
+﻿using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.CQS.Tokens.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ArticleAggregator.Data.CQS.CustomExceptions;
 
 namespace ArticleAggregator.Data.CQS.CommandHandlers;
 

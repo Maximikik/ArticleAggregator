@@ -20,7 +20,6 @@ public class ClientService : IClientService
     private readonly ClientMapper _clientMapper;
     private readonly IMediator _mediator;
 
-
     public ClientService(IUnitOfWork unitOfWork, IConfiguration configuration, ClientMapper clientMapper,
         IMediator mediator)
     {
@@ -53,16 +52,40 @@ public class ClientService : IClientService
         return claimsIdentity;
     }
 
-    public async Task<Guid> CreateClient(ClientDto dto)
-    {
-        _ = dto ?? throw new NotFoundException("ClientDto");
+    //public async Task<Guid> CreateClient(ClientDto dto)
+    //{
+    //    _ = dto ?? throw new NotFoundException("ClientDto");
 
-        var client = _clientMapper.ClientDtoToClient(dto);
+    //    var client = _clientMapper.ClientDtoToClient(dto);
+
+    //    await _unitOfWork.ClientRepository.InsertOne(client);
+    //    await _unitOfWork.Commit();
+
+    //    return client.Id;
+    //}
+
+    public async Task RegisterUser(ClientDto clientDto)
+    {
+        var clientRole = await _unitOfWork.RoleRepository.FindBy(role => role.Name.Equals("User")).FirstOrDefaultAsync();
+
+        var client = new Client
+        {
+            Id = Guid.NewGuid(),
+            Login = clientDto.Login,
+            PasswordHash = GenerateMd5Hash(clientDto.PasswordHash),
+            RoleId = clientDto.RoleId
+        };
 
         await _unitOfWork.ClientRepository.InsertOne(client);
-        await _unitOfWork.Commit();
+        clientRole.Clients.Add(client);
 
-        return client.Id;
+        await _unitOfWork.Commit();
+    }
+
+    public async Task DeleteClient(Guid id)
+    {
+        await _unitOfWork.ClientRepository.DeleteById(id);
+        await _unitOfWork.Commit();
     }
 
     public async Task<ClientDto[]?> GetAllClients()
@@ -79,10 +102,21 @@ public class ClientService : IClientService
         return clientsDto;
     }
 
+    public async Task<ClientDto?> GetClientByRole()
+    {
+        var role = await _unitOfWork.RoleRepository.GetById(Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa7"));
+
+        var client = role.Clients.First();
+
+        var clientDto = _clientMapper.ClientToClientDto(client);
+
+        return clientDto;
+    }
+
     public async Task<ClientDto?> GetClientById(Guid id)
     {
-        var client = await _unitOfWork.ClientRepository.FindBy(client => client.Id.Equals(id))
-            .FirstOrDefaultAsync() ?? throw new NotFoundException("Client", id);
+        var client = await _mediator.Send(new GetClientByIdQuery { Id = id })
+            ?? throw new NotFoundException("Client", id);
 
         var clientDto = _clientMapper.ClientToClientDto(client);
 
@@ -91,8 +125,8 @@ public class ClientService : IClientService
 
     public async Task<ClientDto?> GetClientByLogin(string login)
     {
-        var client = await _unitOfWork.ClientRepository.FindBy(client => client.Login.Equals(login))
-            .FirstOrDefaultAsync() ?? throw new NotFoundException("Client", login);
+        var client = await _mediator.Send(new GetClientByLoginQuery { Login = login })
+            ?? throw new NotFoundException("Client", login);
 
         var clientDto = _clientMapper.ClientToClientDto(client);
 
@@ -128,23 +162,6 @@ public class ClientService : IClientService
         return await _unitOfWork.ClientRepository.FindBy(client => client.Login.Equals(email)).AnyAsync();
     }
 
-    public async Task RegisterUser(ClientDto clientDto)
-    {
-        var clientRole = await _unitOfWork.RoleRepository.FindBy(role => role.Name.Equals("User")).FirstOrDefaultAsync();
-
-        var client = new Client
-        {
-            Id = Guid.NewGuid(),
-            Login = clientDto.Login,
-            PasswordHash = GenerateMd5Hash(clientDto.PasswordHash),
-            RoleId = clientDto.RoleId
-        };
-
-        await _unitOfWork.ClientRepository.InsertOne(client);
-
-        await _unitOfWork.Commit();
-    }
-
     private string GenerateMd5Hash(string input)
     {
         using (var md5 = MD5.Create())
@@ -156,4 +173,6 @@ public class ClientService : IClientService
             return Convert.ToHexString(hashBytes);
         }
     }
+
+
 }

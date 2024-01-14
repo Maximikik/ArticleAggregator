@@ -2,7 +2,7 @@
 
 namespace ArticleAggregator_Repositories.Interfaces;
 
-public interface IClientRepository: IRepository<Client>
+public interface IClientRepository : IRepository<Client>
 {
     Task<Client> GetByLogin(string name);
 }

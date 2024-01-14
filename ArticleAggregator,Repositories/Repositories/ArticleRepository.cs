@@ -1,8 +1,7 @@
-﻿using ArticleAggregator.Data.Entities;
-using ArticleAggregator.Data;
+﻿using ArticleAggregator.Data;
+using ArticleAggregator.Data.Entities;
 using ArticleAggregator_Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using ArticleAggregator.Core;
 
 namespace ArticleAggregator_Repositories.Repositories;
 

@@ -1,6 +1,5 @@
 ﻿using ArticleAggregator.Core;
 using ArticleAggregator.Mapping;
-using ArticleAggregator.Models;
 using ArticleAggregator.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,16 +21,21 @@ public class ClientsController : ControllerBase
         _tokenService = tokenService;
     }
 
-    //[HttpGet("{id}")]
-    //public async Task<IActionResult> GetUserById(Guid id)
-    //{
-    //    var query = new GetClie
-    //}
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUserById(Guid id)
+    {
+        var clientDto = await _clientService.GetClientById(id);
+
+        var client = _clientMapper.ClientDtoToClient(clientDto);
+
+        return Ok(client);
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetUsers(/*filter*/)
     {
-        return Ok(await _clientService.GetAllClients());
+        //return Ok(await _clientService.GetAllClients());
+        return Ok(await _clientService.GetClientByRole());
     }
 
     [HttpPost]
@@ -50,8 +54,10 @@ public class ClientsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser()
+    public async Task<IActionResult> DeleteUser(Guid id)
     {
+        await _clientService.DeleteClient(id);
+
         return Ok();
     }
 

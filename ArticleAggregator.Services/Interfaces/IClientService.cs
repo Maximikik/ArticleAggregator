@@ -12,9 +12,11 @@ public interface IClientService
     public Task<bool> IsPasswordCorrect(string email, string password);
 
     public Task<ClientDto[]?> GetAllClients();
+    public Task<ClientDto?> GetClientByRole();
     public Task<ClientDto?> GetClientById(Guid id);
     public Task<ClientDto?> GetClientByLogin(string login);
     Task<ClientDto> GetClientByRefreshToken(Guid refreshToken);
 
-    public Task<Guid> CreateClient(ClientDto dto);
+    //public Task<Guid> CreateClient(ClientDto dto);
+    public Task DeleteClient(Guid id);
 }

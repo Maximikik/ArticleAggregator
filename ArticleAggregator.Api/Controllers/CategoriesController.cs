@@ -1,5 +1,4 @@
-﻿using ArticleAggregator.Data.CQS.Categories.Commands;
-using ArticleAggregator.Mapping;
+﻿using ArticleAggregator.Mapping;
 using ArticleAggregator.Models;
 using ArticleAggregator.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;

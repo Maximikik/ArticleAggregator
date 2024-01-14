@@ -1,10 +1,10 @@
 ﻿using ArticleAggregator.Mapping;
 using ArticleAggregator.Models;
 using ArticleAggregator.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArticleAggregator.Api.Controllers;
-
 
 [Route("api/[controller]")]
 [ApiController]
@@ -29,7 +29,8 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetArticles(/*filter*/)
+    [Authorize(Roles = "User")]
+    public async Task<IActionResult> GetArticles()
     {
         var articles = (await _articleService.GetPositive())
             .Select(dto => _articleMapper.ArticleDtoToArticleModel(dto))
@@ -41,11 +42,10 @@ public class ArticlesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateArticle(ArticleModel request)
     {
-        //not a fact that this is part of the app
         var dto = _articleMapper.ArticleModelToArticleDto(request);
 
-        var id = await _articleService.CreateArticle(dto);
-        //
+        await _articleService.CreateArticle(dto);
+        
         string urlToResourse = "";
         return Created(urlToResourse, null);
     }
@@ -60,7 +60,6 @@ public class ArticlesController : ControllerBase
     [HttpPatch("{id}")]
     public async Task<IActionResult> UpdateArticle()
     {
-        //await _articleService.
         return Ok();
     }
 }

@@ -1,11 +1,11 @@
-using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Data;
-using Microsoft.EntityFrameworkCore;
+using ArticleAggregator.Data.Entities;
 using ArticleAggregator_Repositories;
 using ArticleAggregator_Repositories.Interfaces;
 using ArticleAggregator_Repositories.Repositories;
-using Serilog.Events;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Serilog.Events;
 
 //const string ConnectionString = "Data Source=SQL6031.site4now.net;Initial Catalog=db_aa223c_dbaggregator;User Id=db_aa223c_dbaggregator_admin;Password=qweasd123123";
 

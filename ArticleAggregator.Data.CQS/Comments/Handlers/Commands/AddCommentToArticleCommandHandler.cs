@@ -2,7 +2,6 @@
 using ArticleAggregator.Data.CQS.CustomExceptions;
 using ArticleAggregator.Mapping;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace ArticleAggregator.Data.CQS.Comments.Handlers.Commands;
 

@@ -1,5 +1,4 @@
 ﻿using ArticleAggregator.Core;
-using ArticleAggregator.Data.CQS.Articles.Commands;
 using ArticleAggregator.Data.CQS.Categories.Commands;
 using ArticleAggregator.Data.CQS.Categories.Queries;
 using ArticleAggregator.Mapping;
@@ -49,15 +48,15 @@ public class CategoryService : ICategoryService
 
         var categoriesDto = new CategoryDto[categories.Count()];
 
-        categories.ForEach(category => 
+        categories.ForEach(category =>
         {
-            categoriesDto[categories.IndexOf(category)] = _categoryMapper.CategoryToCategoryDto(category); 
+            categoriesDto[categories.IndexOf(category)] = _categoryMapper.CategoryToCategoryDto(category);
         });
 
         return categoriesDto;
     }
 
-    public async  Task<CategoryDto?> GetCategoryById(Guid id)
+    public async Task<CategoryDto?> GetCategoryById(Guid id)
     {
         var command = new GetCategoryByIdQuery() { Id = id };
         var category = await _mediator.Send(command);

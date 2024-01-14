@@ -1,5 +1,5 @@
-﻿using MediatR;
-using ArticleAggregator.Data.Entities;
+﻿using ArticleAggregator.Data.Entities;
+using MediatR;
 
 namespace ArticleAggregator.Data.CQS.Queries;
 

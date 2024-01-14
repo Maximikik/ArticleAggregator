@@ -6,7 +6,7 @@ using MediatR;
 namespace ArticleAggregator.Data.CQS.Categories.Handlers.Commands;
 
 public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand>
-{    
+{
     private readonly ArticlesAggregatorDbContext _dbContext;
     private readonly CategoryMapper _mapper;
 

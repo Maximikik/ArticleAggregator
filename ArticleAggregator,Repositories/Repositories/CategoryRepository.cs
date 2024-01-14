@@ -1,5 +1,4 @@
-﻿using ArticleAggregator.Core;
-using ArticleAggregator.Data;
+﻿using ArticleAggregator.Data;
 using ArticleAggregator.Data.Entities;
 using ArticleAggregator_Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;

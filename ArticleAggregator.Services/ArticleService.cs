@@ -71,7 +71,7 @@ public class ArticleService : IArticleService
 
     public async Task<Guid> CreateArticle(ArticleDto dto)
     {
-        var command = new CreateArticleCommand() { ArticleDto = dto};
+        var command = new CreateArticleCommand() { ArticleDto = dto };
         var id = command.ArticleDto.Id;
         await _mediator.Send(command);
         return id;

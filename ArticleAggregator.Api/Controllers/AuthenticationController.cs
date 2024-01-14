@@ -1,6 +1,4 @@
-﻿using ArticleAggregator.Core;
-using ArticleAggregator.Models;
-using ArticleAggregator.Services;
+﻿using ArticleAggregator.Models;
 using ArticleAggregator.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,17 +15,15 @@ public class AuthenticationController : ControllerBase
     public AuthenticationController(IClientService clientService, ITokenService tokenService)
     {
         _clientService = clientService;
-        _tokenService= tokenService;
+        _tokenService = tokenService;
     }
 
     [HttpPost]
     public async Task<IActionResult> GenerateToken(LoginModel request)
     {
-        //can be refactored
         var isClientCorrect = await _clientService.IsPasswordCorrect(request.Login, request.Password);
         if (isClientCorrect)
         {
-
             var clientDto = await _clientService.GetClientByLogin(request.Login);
             var jwtToken = await _tokenService.GenerateJwtToken(clientDto);
             var refreshToken = await _tokenService.AddRefreshToken(clientDto.Login,
