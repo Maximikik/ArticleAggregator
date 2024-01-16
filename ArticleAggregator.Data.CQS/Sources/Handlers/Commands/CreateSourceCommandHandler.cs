@@ -22,6 +22,10 @@ public class CreateSourceCommandHandler : IRequestHandler<CreateSourceCommand>
 
         var source = _sourceMapper.SourceDtoToSource(request.SourceDto);
 
+        var articles = _dbContext.Articles.Where(article => request.SourceDto.ArticlesId.Contains(article.Id)).ToList();
+
+        source.Articles = articles;
+
         await _dbContext.Sources.AddAsync(source, cancellationToken);
 
         await _dbContext.SaveChangesAsync(cancellationToken);

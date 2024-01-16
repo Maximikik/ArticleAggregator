@@ -33,26 +33,26 @@ public class SourceController : ControllerBase
         return Ok(source);
     }
 
-    //[HttpGet]
-    //public async Task<IActionResult> GetSourceByName(string name)
-    //{
-    //    var source = await _sourceController.GetSourceByName(name);
-    //    return Ok(source);
-    //}
+    [HttpGet("{name}")]
+    public async Task<IActionResult> GetSourceByName(string name)
+    {
+        var source = await _sourceController.GetSourceByName(name);
+        return Ok(source);
+    }
 
-    //[HttpGet("Articles/{id}")]
-    //public async Task<IActionResult> GetArticlesOfSourceById(Guid id)
-    //{
-    //    var sources = await _sourceController.GetArticlesOfSourceById(id);
-    //    return Ok(sources);
-    //}
+    [HttpGet("ArticlesById/{id}")]
+    public async Task<IActionResult> GetArticlesOfSourceById(Guid id)
+    {
+        var sources = await _sourceController.GetArticlesOfSourceById(id);
+        return Ok(sources);
+    }
 
-    //[HttpGet("Articles/{name}")]
-    //public async Task<IActionResult> GetArticlesOfSourceByName(string name)
-    //{
-    //    var sources = await _sourceController.GetArticlesOfSourceByName(name);
-    //    return Ok(sources);
-    //}
+    [HttpGet("ArticlesByName/{name}")]
+    public async Task<IActionResult> GetArticlesOfSourceByName(string name)
+    {
+        var sources = await _sourceController.GetArticlesOfSourceByName(name);
+        return Ok(sources);
+    }
 
     [HttpPost]
     public async Task<IActionResult> CreateSource([FromBody] SourceModel sourceModel)

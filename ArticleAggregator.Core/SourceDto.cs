@@ -7,5 +7,5 @@ public class SourceDto
     public string Url { get; set; } = null!;
     public string RssUrl { get; set; } = null!;
 
-    public virtual IEnumerable<Guid> ArticlesId { get; set; }
+    public IEnumerable<Guid> ArticlesId { get; set; }
 }
