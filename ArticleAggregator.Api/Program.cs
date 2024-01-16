@@ -1,4 +1,5 @@
 using ArticleAggregator.Api;
+using ArticleAggregator.Data;
 using Hangfire;
 using Serilog;
 using Serilog.Events;
@@ -34,6 +35,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<ArticlesAggregatorDbContext>();
+    DbInitializer.Initialize(db);
 }
 
 app.UseHttpsRedirection();

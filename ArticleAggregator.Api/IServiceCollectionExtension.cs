@@ -119,5 +119,7 @@ public static class IServiceCollectionExtension
         //    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
         //    options.AddPolicy("User", policy => policy.RequireRole("User"));
         //});
+
+        services.AddAuthorization();
     }
 }
