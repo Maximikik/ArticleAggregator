@@ -1,4 +1,5 @@
-﻿using ArticleAggregator.Data;
+﻿using ArticleAggregator.Api.Controllers;
+using ArticleAggregator.Data;
 using ArticleAggregator.Data.CQS.Articles.Commands;
 using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
@@ -41,6 +42,8 @@ public static class IServiceCollectionExtension
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<ITokenService, TokenService>();
+
+        services.AddScoped<RssReader>();
 
         services.AddScoped<ArticleMapper>();
         services.AddScoped<CategoryMapper>();
