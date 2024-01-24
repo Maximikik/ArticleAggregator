@@ -13,17 +13,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArticleAggregator.Repositor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArticleAggregator.Identity", "ArticleAggregator.Identity\ArticleAggregator.Identity.csproj", "{F948C67A-7F69-4579-900F-CE446D5D2717}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticleAggregator.Api", "ArticleAggregator.Api\ArticleAggregator.Api.csproj", "{551BEE5E-6A08-42FB-A640-F8775F4498E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArticleAggregator.Api", "ArticleAggregator.Api\ArticleAggregator.Api.csproj", "{551BEE5E-6A08-42FB-A640-F8775F4498E0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BLL", "BLL", "{7109FC71-B65A-4CFA-A089-5970D9A82EA9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ArticleAggregator.DAL", "ArticleAggregator.DAL", "{72264814-F673-4A99-87BA-18D53F62458A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticleAggregator.Services", "ArticleAggregator.Services\ArticleAggregator.Services.csproj", "{1D10E981-BCBB-41C7-AF0C-403D5C45FF2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArticleAggregator.Services", "ArticleAggregator.Services\ArticleAggregator.Services.csproj", "{1D10E981-BCBB-41C7-AF0C-403D5C45FF2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticleAggregator.Mapping", "ArticleAggregator.Mapping\ArticleAggregator.Mapping.csproj", "{AEAA1EE8-AB1D-4D4C-BC42-0BBDFD54A853}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArticleAggregator.Mapping", "ArticleAggregator.Mapping\ArticleAggregator.Mapping.csproj", "{AEAA1EE8-AB1D-4D4C-BC42-0BBDFD54A853}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticleAggregator.Data.CQS", "ArticleAggregator.Data.CQS\ArticleAggregator.Data.CQS.csproj", "{D04274DC-E1AD-497E-93C3-020D6D8358E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArticleAggregator.Data.CQS", "ArticleAggregator.Data.CQS\ArticleAggregator.Data.CQS.csproj", "{D04274DC-E1AD-497E-93C3-020D6D8358E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextValuer", "TextValuer\TextValuer.csproj", "{4504383B-1FFD-4D65-B340-8A5526FFAD07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{D04274DC-E1AD-497E-93C3-020D6D8358E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D04274DC-E1AD-497E-93C3-020D6D8358E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D04274DC-E1AD-497E-93C3-020D6D8358E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4504383B-1FFD-4D65-B340-8A5526FFAD07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4504383B-1FFD-4D65-B340-8A5526FFAD07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4504383B-1FFD-4D65-B340-8A5526FFAD07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4504383B-1FFD-4D65-B340-8A5526FFAD07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{D4A730D3-4310-4FCD-9812-2DD2C46FB95C} = {72264814-F673-4A99-87BA-18D53F62458A}
 		{1D10E981-BCBB-41C7-AF0C-403D5C45FF2C} = {7109FC71-B65A-4CFA-A089-5970D9A82EA9}
 		{D04274DC-E1AD-497E-93C3-020D6D8358E4} = {72264814-F673-4A99-87BA-18D53F62458A}
+		{4504383B-1FFD-4D65-B340-8A5526FFAD07} = {72264814-F673-4A99-87BA-18D53F62458A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8B9AF8E-208F-4938-88DD-1F8ACDD5D1F0}

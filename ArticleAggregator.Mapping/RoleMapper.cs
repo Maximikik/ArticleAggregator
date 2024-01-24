@@ -1,4 +1,4 @@
-﻿using ArticleAggregator.Core;
+﻿using ArticleAggregator.Core.Dto;
 using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Models;
 using Riok.Mapperly.Abstractions;

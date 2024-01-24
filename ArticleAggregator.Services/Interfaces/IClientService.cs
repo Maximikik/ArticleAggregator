@@ -1,4 +1,4 @@
-﻿using ArticleAggregator.Core;
+﻿using ArticleAggregator.Core.Dto;
 using System.Security.Claims;
 
 namespace ArticleAggregator.Services.Interfaces;

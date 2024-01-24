@@ -1,4 +1,4 @@
-﻿using ArticleAggregator.Core;
+﻿using ArticleAggregator.Core.Dto;
 using ArticleAggregator.Data.CQS.Comments.Commands;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;

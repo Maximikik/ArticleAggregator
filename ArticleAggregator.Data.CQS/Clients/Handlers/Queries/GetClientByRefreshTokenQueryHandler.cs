@@ -1,5 +1,5 @@
 ﻿using ArticleAggregator.Data.CQS.Clients.Queries;
-using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Data.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

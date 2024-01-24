@@ -1,4 +1,4 @@
-﻿using ArticleAggregator.Core;
+﻿using ArticleAggregator.Core.Dto;
 using ArticleAggregator.Data.CQS.Categories.Commands;
 using ArticleAggregator.Data.CQS.Categories.Queries;
 using ArticleAggregator.Mapping;

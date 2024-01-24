@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Formats.Asn1;
 using System.Xml.Linq;
 
 namespace ArticleAggregator.Api.Controllers;

@@ -1,4 +1,4 @@
-﻿using ArticleAggregator.Core;
+﻿using ArticleAggregator.Core.Dto;
 
 namespace ArticleAggregator.Services.Interfaces;
 

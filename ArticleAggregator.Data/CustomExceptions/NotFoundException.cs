@@ -1,4 +1,4 @@
-﻿namespace ArticleAggregator.Data.CQS.CustomExceptions;
+﻿namespace ArticleAggregator.Data.CustomExceptions;
 
 public class NotFoundException : Exception
 {

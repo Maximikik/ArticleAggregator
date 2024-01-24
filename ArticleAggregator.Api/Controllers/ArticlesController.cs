@@ -1,7 +1,6 @@
 ﻿using ArticleAggregator.Mapping;
 using ArticleAggregator.Models;
 using ArticleAggregator.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArticleAggregator.Api.Controllers;
@@ -45,7 +44,7 @@ public class ArticlesController : ControllerBase
         var dto = _articleMapper.ArticleModelToArticleDto(request);
 
         await _articleService.CreateArticle(dto);
-        
+
         string urlToResourse = "";
         return Created(urlToResourse, null);
     }

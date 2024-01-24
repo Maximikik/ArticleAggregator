@@ -1,6 +1,6 @@
-﻿using ArticleAggregator.Core;
+﻿using ArticleAggregator.Core.Dto;
 using ArticleAggregator.Data.CQS.Clients.Queries;
-using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;

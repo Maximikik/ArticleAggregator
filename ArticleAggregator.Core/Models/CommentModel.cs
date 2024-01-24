@@ -1,6 +1,6 @@
-﻿namespace ArticleAggregator.Core;
+﻿namespace ArticleAggregator.Models;
 
-public class CommentDto
+public class CommentModel
 {
     public Guid Id { get; set; }
 
@@ -8,10 +8,11 @@ public class CommentDto
     public DateTime Date { get; set; }
 
     public Guid ArticleId { get; set; }
+    public Article Article { get; set; } = null!;
 
     public Guid? ParentCommentId { get; set; }
 
-    public List<CommentDto> ChildComments { get; set; } = null!;
+    public List<Guid> ChildCommentsId { get; set; } = null!;
 
     public Guid ClientId { get; set; }
 }

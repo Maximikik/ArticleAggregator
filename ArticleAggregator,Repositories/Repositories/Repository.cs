@@ -1,7 +1,9 @@
-﻿using ArticleAggregator.Core;
+﻿using ArticleAggregator.Core.Dto;
 using ArticleAggregator.Data;
+using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Data.Entities;
 using ArticleAggregator_Repositories.Interfaces;
+using Azure.AI.OpenAI;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -129,5 +131,31 @@ public class Repository<T> : IRepository<T> where T : class, IBaseEntity
     public async Task<List<T>> GetAll()
     {
         return await _dbSet.ToListAsync();
+    }
+
+    public async Task<int> RateTextForPositivity(string text)
+    {
+        OpenAIClient client = new OpenAIClient("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");
+
+        var options = new ChatCompletionsOptions
+        {
+            Messages =
+            {
+                new ChatRequestUserMessage($"Rate the text on positivity on a scale of 0 to 9: \"{text}\"" +
+                "\nAnswer please like this: \"{number}\"")
+            },
+            DeploymentName = "gpt-3.5-turbo"
+        };
+
+        var openAiResponse = await client.GetChatCompletionsAsync(options);
+
+        int rate;
+
+        if (!Int32.TryParse(openAiResponse.Value.Choices[0].Message.Content, out rate))
+        {
+            throw new IncorrectResponseFromChatGpt(openAiResponse.Value.Choices[0].Message.Content, "Rate");
+        }
+
+        return rate;
     }
 }

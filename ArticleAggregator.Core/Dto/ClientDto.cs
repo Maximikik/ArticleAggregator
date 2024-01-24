@@ -1,4 +1,4 @@
-﻿namespace ArticleAggregator.Core;
+﻿namespace ArticleAggregator.Core.Dto;
 
 public class ClientDto
 {

@@ -14,6 +14,12 @@ public class ArticleRepository : Repository<Article>, IArticleRepository
 
     public async Task<Article> GetByTitle(string title)
     {
-        return await _dbSet.FirstOrDefaultAsync(article => article.Title.Equals(title));
+        return await _dbSet.FirstOrDefaultAsync(article => article.Title.Equals(title))
+            ?? throw new ArgumentNullException();
+    }
+
+    public Task<List<Article>> RateArticle(Article article)
+    {
+        throw new NotImplementedException();
     }
 }

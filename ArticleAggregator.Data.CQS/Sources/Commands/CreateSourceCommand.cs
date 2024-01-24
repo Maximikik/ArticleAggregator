@@ -1,4 +1,4 @@
-﻿using ArticleAggregator.Core;
+﻿using ArticleAggregator.Core.Dto;
 using MediatR;
 
 namespace ArticleAggregator.Data.CQS.Sources.Commands;

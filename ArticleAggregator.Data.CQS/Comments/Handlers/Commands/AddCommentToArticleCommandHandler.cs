@@ -1,5 +1,5 @@
 ﻿using ArticleAggregator.Data.CQS.Comments.Commands;
-using ArticleAggregator.Data.CQS.CustomExceptions;
+using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Mapping;
 using MediatR;
 

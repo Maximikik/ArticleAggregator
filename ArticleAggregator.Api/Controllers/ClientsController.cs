@@ -1,4 +1,4 @@
-﻿using ArticleAggregator.Core;
+﻿using ArticleAggregator.Core.Dto;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;

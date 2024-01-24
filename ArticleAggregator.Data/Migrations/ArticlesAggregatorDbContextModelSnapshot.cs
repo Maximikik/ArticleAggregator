@@ -31,6 +31,10 @@ namespace ArticleAggregator.Data.Migrations
                     b.Property<Guid>("ArticleSourceId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double?>("Rating")
                         .HasColumnType("float");
 

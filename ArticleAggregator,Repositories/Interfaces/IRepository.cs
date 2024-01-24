@@ -1,4 +1,4 @@
-﻿using ArticleAggregator.Core;
+﻿using ArticleAggregator.Core.Dto;
 using ArticleAggregator.Data.Entities;
 using System.Linq.Expressions;
 
@@ -23,6 +23,8 @@ public interface IRepository<T> where T : class, IBaseEntity
 
     Task DeleteById(Guid id);
     void DeleteMany(IEnumerable<T> entities);
+
+    Task<int> RateTextForPositivity(string article);
 
     Task<int> Count();
 }
