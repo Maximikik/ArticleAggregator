@@ -1,16 +1,20 @@
-﻿using ArticleAggregator.Data.Entities;
-using ArticleAggregator_Repositories.Interfaces;
+﻿using ArticleAggregator_Repositories.Interfaces;
 
 namespace ArticleAggregator_Repositories;
 
 public interface IUnitOfWork
 {
-    IRepository<Article> ArticleRepository { get; }
-    IRepository<Category> CategoryRepository { get; }
-    IRepository<Client> ClientRepository { get; }
-    IRepository<Comment> CommentRepository { get; }
-    IRepository<Source> SourceRepository { get; }
-    IRepository<Role> RoleRepository { get; }
+    public IArticleRepository ArticleRepository { get; }
+
+    public ICategoryRepository CategoryRepository { get; }
+
+    public IClientRepository ClientRepository { get; }
+
+    public ISourceRepository SourceRepository { get; }
+
+    public ICommentRepository CommentRepository { get; }
+
+    public IRoleRepository RoleRepository { get; }
 
     Task<int> Commit();
 }

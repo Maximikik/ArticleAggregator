@@ -19,8 +19,6 @@ var logger = new LoggerConfiguration()
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
-builder.Configuration.AddJsonFile("AFINN-ru.json");
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 

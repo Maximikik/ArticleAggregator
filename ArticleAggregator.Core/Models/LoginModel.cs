@@ -1,4 +1,4 @@
-﻿namespace ArticleAggregator.Models;
+﻿namespace ArticleAggregator.Core.Models;
 
 public class LoginModel
 {

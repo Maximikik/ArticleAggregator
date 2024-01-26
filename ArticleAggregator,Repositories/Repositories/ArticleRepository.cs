@@ -18,7 +18,7 @@ public class ArticleRepository : Repository<Article>, IArticleRepository
             ?? throw new ArgumentNullException();
     }
 
-    public Task<List<Article>> RateArticle(Article article)
+    public Task<Article> RateArticle(Article article)
     {
         throw new NotImplementedException();
     }

@@ -2,7 +2,7 @@
 
 namespace ArticleAggregator_Repositories.Interfaces;
 
-public interface ISourceRepository
+public interface ISourceRepository : IRepository<Source>
 {
     Task<Source?> GetByUrl(string url);
 }

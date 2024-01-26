@@ -1,7 +1,8 @@
 ﻿using ArticleAggregator.Core.Dto;
-using ArticleAggregator.Data.CQS.Clients.Queries;
-using ArticleAggregator.Data.CQS.Roles.Queries;
-using ArticleAggregator.Data.CQS.Tokens.Commands;
+using ArticleAggregator.Data.CQS.Clients.Queries.GetClientByLogin;
+using ArticleAggregator.Data.CQS.Roles.Queries.GetRoleById;
+using ArticleAggregator.Data.CQS.Tokens.Commands.AddRefreshToken;
+using ArticleAggregator.Data.CQS.Tokens.Commands.DeleteRefreshToken;
 using ArticleAggregator.Services.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Configuration;

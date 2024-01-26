@@ -1,4 +1,4 @@
-﻿namespace ArticleAggregator.Models;
+﻿namespace ArticleAggregator.Core.Models;
 
 public class CommentModel
 {
@@ -8,7 +8,7 @@ public class CommentModel
     public DateTime Date { get; set; }
 
     public Guid ArticleId { get; set; }
-    public Article Article { get; set; } = null!;
+    public ArticleModel Article { get; set; } = null!;
 
     public Guid? ParentCommentId { get; set; }
 

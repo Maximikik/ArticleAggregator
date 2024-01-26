@@ -1,6 +1,11 @@
 ﻿using ArticleAggregator.Core.Dto;
-using ArticleAggregator.Data.CQS.Roles.Commands;
-using ArticleAggregator.Data.CQS.Roles.Queries;
+using ArticleAggregator.Data.CQS.Roles.Commands.CreateRole;
+using ArticleAggregator.Data.CQS.Roles.Commands.DeleteRoleById;
+using ArticleAggregator.Data.CQS.Roles.Commands.DeleteRoleByName;
+using ArticleAggregator.Data.CQS.Roles.Commands.UpdateRoleById;
+using ArticleAggregator.Data.CQS.Roles.Queries.GetAllRoles;
+using ArticleAggregator.Data.CQS.Roles.Queries.GetRoleById;
+using ArticleAggregator.Data.CQS.Roles.Queries.GetRoleByName;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;

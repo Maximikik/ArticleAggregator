@@ -6,10 +6,31 @@ namespace ArticleAggregator_Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {
+    private readonly ArticlesAggregatorDbContext _dbContext;
+
+    private readonly IArticleRepository _articleRepository;
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly IClientRepository _clientRepository;
+    private readonly ISourceRepository _sourceRepository;
+    private readonly ICommentRepository _commentRepository;
+    private readonly IRoleRepository _roleRepository;
+
+    public IArticleRepository ArticleRepository => _articleRepository;
+
+    public ICategoryRepository CategoryRepository => _categoryRepository;
+
+    public IClientRepository ClientRepository => _clientRepository;
+
+    public ISourceRepository SourceRepository => _sourceRepository;
+
+    public ICommentRepository CommentRepository => _commentRepository;
+
+    public IRoleRepository RoleRepository => _roleRepository;
+
     public UnitOfWork(ArticlesAggregatorDbContext dbContext,
-        IRepository<Article> articleRepository, IRepository<Category> categoryRepository,
-        IRepository<Client> clientRepository, IRepository<Source> sourceRepository,
-        IRepository<Comment> commentRepository, IRepository<Role> repository)
+        IArticleRepository articleRepository, ICategoryRepository categoryRepository,
+        IClientRepository clientRepository, ISourceRepository sourceRepository,
+        ICommentRepository commentRepository, IRoleRepository repository)
     {
         _dbContext = dbContext;
         _articleRepository = articleRepository;
@@ -19,27 +40,6 @@ public class UnitOfWork : IUnitOfWork
         _commentRepository = commentRepository;
         _roleRepository = repository;
     }
-
-    private readonly ArticlesAggregatorDbContext _dbContext;
-
-    private readonly IRepository<Article> _articleRepository;
-    private readonly IRepository<Category> _categoryRepository;
-    private readonly IRepository<Client> _clientRepository;
-    private readonly IRepository<Source> _sourceRepository;
-    private readonly IRepository<Comment> _commentRepository;
-    private readonly IRepository<Role> _roleRepository;
-
-    public IRepository<Article> ArticleRepository => _articleRepository;
-
-    public IRepository<Category> CategoryRepository => _categoryRepository;
-
-    public IRepository<Client> ClientRepository => _clientRepository;
-
-    public IRepository<Source> SourceRepository => _sourceRepository;
-
-    public IRepository<Comment> CommentRepository => _commentRepository;
-
-    public IRepository<Role> RoleRepository => _roleRepository;
 
     public async Task<int> Commit()
     {

@@ -1,82 +1,82 @@
-﻿using ArticleAggregator.Data.Entities;
-using ArticleAggregator.Models;
-using ArticleAggregator_Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿//using ArticleAggregator.Data.Entities;
+//using ArticleAggregator.Core.Models;
+//using ArticleAggregator_Repositories;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.Mvc.Rendering;
+//using Microsoft.EntityFrameworkCore;
 
-namespace ArticleAggregator.Controllers;
+//namespace ArticleAggregator.Controllers;
 
-public class CategoryController : Controller
-{
-    private readonly IUnitOfWork _unitOfWork;
+//public class CategoryController : Controller
+//{
+//    private readonly IUnitOfWork _unitOfWork;
 
-    public CategoryController(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
+//    public CategoryController(IUnitOfWork unitOfWork)
+//    {
+//        _unitOfWork = unitOfWork;
+//    }
 
-    [HttpGet]
-    public async Task<IActionResult> CategoriesPreview()
-    {
-        var categoriesList = await _unitOfWork.CategoryRepository
-        .FindBy(category => !string.IsNullOrEmpty(category.Name))
-        .Select(category => new CategoryModel()
-        {
-            Id = category.Id,
-            Name = category.Name,
-            PositivityRating = category.Rating
-        })
-        .ToListAsync();
-        return View(categoriesList);
-    }
+//    [HttpGet]
+//    public async Task<IActionResult> CategoriesPreview()
+//    {
+//        var categoriesList = await _unitOfWork.CategoryRepository
+//        .FindBy(category => !string.IsNullOrEmpty(category.Name))
+//        .Select(category => new CategoryModel()
+//        {
+//            Id = category.Id,
+//            Name = category.Name,
+//            PositivityRating = category.Rating
+//        })
+//        .ToListAsync();
+//        return View(categoriesList);
+//    }
 
-    [HttpGet]
-    public async Task<IActionResult> Create()
-    {
-        return View();
-    }
+//    [HttpGet]
+//    public async Task<IActionResult> Create()
+//    {
+//        return View();
+//    }
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromForm] CategoryModel categoryModel)
-    {
-        var category = new Category
-        {
-            Id = categoryModel.Id,
-            Name = categoryModel.Name,
-            Rating = categoryModel.PositivityRating,
-        };
+//    [HttpPost]
+//    public async Task<IActionResult> Create([FromForm] CategoryModel categoryModel)
+//    {
+//        var category = new Category
+//        {
+//            Id = categoryModel.Id,
+//            Name = categoryModel.Name,
+//            Rating = categoryModel.PositivityRating,
+//        };
 
-        await _unitOfWork.CategoryRepository.InsertOne(category);
-        await _unitOfWork.Commit();
+//        await _unitOfWork.CategoryRepository.InsertOne(category);
+//        await _unitOfWork.Commit();
 
-        return RedirectToAction("CategoriesPreview");
-    }
+//        return RedirectToAction("CategoriesPreview");
+//    }
 
-    [HttpGet]
-    public async Task<IActionResult> Delete()
-    {
-        var categories = await _unitOfWork.CategoryRepository.GetAll();
+//    [HttpGet]
+//    public async Task<IActionResult> Delete()
+//    {
+//        var categories = await _unitOfWork.CategoryRepository.GetAll();
 
-        var model = new DeleteModel()
-        {
-            DeleteList = new List<SelectListItem>()
-        };
+//        var model = new DeleteModel()
+//        {
+//            DeleteList = new List<SelectListItem>()
+//        };
 
-        foreach (var item in categories)
-        {
-            model.DeleteList.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
-        }
+//        foreach (var item in categories)
+//        {
+//            model.DeleteList.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+//        }
 
-        return View(model);
-    }
+//        return View(model);
+//    }
 
-    [HttpPost]
-    public async Task<IActionResult> Delete([FromForm] DeleteModel DeleteModel)
-    {
-        await _unitOfWork.CategoryRepository.DeleteById(DeleteModel.Selected);
-        await _unitOfWork.Commit();
+//    [HttpPost]
+//    public async Task<IActionResult> Delete([FromForm] DeleteModel DeleteModel)
+//    {
+//        await _unitOfWork.CategoryRepository.DeleteById(DeleteModel.Selected);
+//        await _unitOfWork.Commit();
 
-        return RedirectToAction("CategoriesPreview");
-    }
-}
+//        return RedirectToAction("CategoriesPreview");
+//    }
+//}

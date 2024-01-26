@@ -1,7 +1,11 @@
 ﻿using ArticleAggregator.Core.Dto;
-using ArticleAggregator.Data.CQS.Categories.Commands;
-using ArticleAggregator.Data.CQS.Sources.Commands;
-using ArticleAggregator.Data.CQS.Sources.Queries;
+using ArticleAggregator.Data.CQS.Categories.Commands.DeleteCategoryById;
+using ArticleAggregator.Data.CQS.Sources.Commands.CreateSource;
+using ArticleAggregator.Data.CQS.Sources.Queries.GetAllSources;
+using ArticleAggregator.Data.CQS.Sources.Queries.GetArticlesOfSourceById;
+using ArticleAggregator.Data.CQS.Sources.Queries.GetArticlesOfSourceByName;
+using ArticleAggregator.Data.CQS.Sources.Queries.GetSourceById;
+using ArticleAggregator.Data.CQS.Sources.Queries.GetSourceByName;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;

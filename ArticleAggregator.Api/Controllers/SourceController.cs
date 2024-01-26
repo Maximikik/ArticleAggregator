@@ -1,5 +1,5 @@
-﻿using ArticleAggregator.Mapping;
-using ArticleAggregator.Models;
+﻿using ArticleAggregator.Core.Models;
+using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

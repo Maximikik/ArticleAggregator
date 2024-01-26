@@ -1,6 +1,6 @@
 ﻿using ArticleAggregator.Api.Controllers;
 using ArticleAggregator.Data;
-using ArticleAggregator.Data.CQS.Articles.Commands;
+using ArticleAggregator.Data.CQS.Articles.Commands.CreateArticle;
 using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services;
@@ -33,6 +33,13 @@ public static class IServiceCollectionExtension
         services.AddScoped<IRepository<Role>, Repository<Role>>();
         services.AddScoped<IRepository<Client>, Repository<Client>>();
 
+        services.AddScoped<IArticleRepository, ArticleRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<ICommentRepository, CommentRepository>();
+        services.AddScoped<ISourceRepository, SourceRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IClientRepository, ClientRepository>();
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IArticleService, ArticleService>();
@@ -60,7 +67,7 @@ public static class IServiceCollectionExtension
 
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "PFS.WebApi", Version = "v1" });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "GNA", Version = "v1" });
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 In = ParameterLocation.Header,
@@ -117,11 +124,6 @@ public static class IServiceCollectionExtension
 
                 };
             });
-        //services.AddAuthorization(options =>
-        //{
-        //    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-        //    options.AddPolicy("User", policy => policy.RequireRole("User"));
-        //});
 
         services.AddAuthorization();
     }

@@ -1,5 +1,6 @@
 ﻿using ArticleAggregator.Core.Dto;
-using ArticleAggregator.Data.CQS.Comments.Commands;
+using ArticleAggregator.Data.CQS.Comments.Commands.AddCommentToArticle;
+using ArticleAggregator.Data.CQS.Comments.Commands.RemoveCommentFromArticle;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;

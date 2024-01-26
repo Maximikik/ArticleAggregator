@@ -1,6 +1,6 @@
 ﻿using ArticleAggregator.Core.Dto;
+using ArticleAggregator.Core.Models;
 using ArticleAggregator.Data.Entities;
-using ArticleAggregator.Models;
 using Riok.Mapperly.Abstractions;
 
 namespace ArticleAggregator.Mapping;

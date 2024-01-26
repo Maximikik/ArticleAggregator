@@ -1,5 +1,7 @@
 ﻿using ArticleAggregator.Core.Dto;
-using ArticleAggregator.Data.CQS.Clients.Queries;
+using ArticleAggregator.Data.CQS.Clients.Queries.GetClientById;
+using ArticleAggregator.Data.CQS.Clients.Queries.GetClientByLogin;
+using ArticleAggregator.Data.CQS.Clients.Queries.GetClientByRefreshToken;
 using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;

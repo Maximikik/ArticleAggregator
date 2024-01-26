@@ -1,6 +1,8 @@
 ﻿using ArticleAggregator.Core.Dto;
-using ArticleAggregator.Data.CQS.Articles.Commands;
-using ArticleAggregator.Data.CQS.Articles.Queries;
+using ArticleAggregator.Data.CQS.Articles.Commands.CreateArticle;
+using ArticleAggregator.Data.CQS.Articles.Commands.InsertRssData;
+using ArticleAggregator.Data.CQS.Articles.Queries.GetArticleById;
+using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;
@@ -16,14 +18,16 @@ public class ArticleService : IArticleService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ArticleMapper _articleMapper;
+    private readonly CommentMapper _commentMapper;
     private readonly IMediator _mediator;
     private readonly IConfiguration _configuration;
 
     public ArticleService(IUnitOfWork unitOfWork,
-       ArticleMapper articleMapper, IMediator mediator, IConfiguration configuration)
+       ArticleMapper articleMapper, CommentMapper commentMapper, IMediator mediator, IConfiguration configuration)
     {
         _unitOfWork = unitOfWork;
         _articleMapper = articleMapper;
+        _commentMapper = commentMapper;
         _mediator = mediator;
         _configuration = configuration;
     }
@@ -82,6 +86,14 @@ public class ArticleService : IArticleService
         throw new NotImplementedException();
     }
 
+    public async Task RateArticles(ArticleDto[] articleDtos)
+    {
+        foreach (var item in articleDtos)
+        {
+            await _unitOfWork.ArticleRepository.RateTextForPositivity(item.Description);
+        }
+    }
+
     public async Task DeleteArticle(Guid id)
     {
         await _unitOfWork.ArticleRepository.DeleteById(id);
@@ -115,8 +127,15 @@ public class ArticleService : IArticleService
         return articles;
     }
 
-    public Task<CommentDto[]?> GetCommentsOfArticle(Guid id)
+    public async Task<CommentDto[]?> GetCommentsOfArticle(Guid id)
     {
-        throw new NotImplementedException();
+        var article = await _unitOfWork.ArticleRepository.GetById(id)
+            ?? throw new NotFoundException("Article", id);
+
+        var comments = await _unitOfWork.CommentRepository.GetArticleComments(article);
+
+        var commentsDto = comments.Select(comment => _commentMapper.CommentToCommentDto(comment)).ToArray();
+
+        return commentsDto;
     }
 }

@@ -1,5 +1,7 @@
-﻿namespace ArticleAggregator_Repositories.Interfaces;
+﻿using ArticleAggregator.Data.Entities;
 
-public interface IRoleRepository
+namespace ArticleAggregator_Repositories.Interfaces;
+
+public interface IRoleRepository : IRepository<Role>
 {
 }

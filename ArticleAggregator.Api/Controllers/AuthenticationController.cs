@@ -1,4 +1,4 @@
-﻿using ArticleAggregator.Models;
+﻿using ArticleAggregator.Core.Models;
 using ArticleAggregator.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

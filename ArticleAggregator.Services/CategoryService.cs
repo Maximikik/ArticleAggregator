@@ -1,6 +1,10 @@
 ﻿using ArticleAggregator.Core.Dto;
-using ArticleAggregator.Data.CQS.Categories.Commands;
-using ArticleAggregator.Data.CQS.Categories.Queries;
+using ArticleAggregator.Data.CQS.Categories.Commands.CreateCategory;
+using ArticleAggregator.Data.CQS.Categories.Commands.DeleteCategoryById;
+using ArticleAggregator.Data.CQS.Categories.Commands.DeleteCategoryByName;
+using ArticleAggregator.Data.CQS.Categories.Queries.GetAllCategories;
+using ArticleAggregator.Data.CQS.Categories.Queries.GetCategoryById;
+using ArticleAggregator.Data.CQS.Categories.Queries.GetCategoryByName;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;
