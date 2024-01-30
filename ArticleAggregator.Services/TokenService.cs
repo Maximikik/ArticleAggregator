@@ -3,6 +3,7 @@ using ArticleAggregator.Data.CQS.Clients.Queries.GetClientByLogin;
 using ArticleAggregator.Data.CQS.Roles.Queries.GetRoleById;
 using ArticleAggregator.Data.CQS.Tokens.Commands.AddRefreshToken;
 using ArticleAggregator.Data.CQS.Tokens.Commands.DeleteRefreshToken;
+using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Services.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -50,20 +51,27 @@ public class TokenService : ITokenService
         var issuer = _configuration["Jwt:Issuer"];
         var audience = _configuration["Jwt:Audience"];
 
-        var clientRole = await _mediator.Send(new GetRoleByIdQuery { Id = clientDto.RoleId });
+        var clientRole = await _mediator.Send(new GetRoleByIdQuery { Id = clientDto.RoleId })
+            ?? throw new NotFoundException("Role", clientDto.RoleId);
 
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Name, clientDto.Login),
+                new Claim(ClaimTypes.Email, clientDto.Login),
                 new Claim(ClaimTypes.Role, clientRole.Name),
                 new Claim("Audience",audience!),
                 new Claim("Issuer",issuer!)
             }),
             Expires = DateTime.UtcNow.AddMinutes(lifetime),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+            //Expires = DateTime.Now.AddMinutes(lifetime),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
+            Audience = audience,
+            IssuedAt = DateTime.UtcNow,
+            Issuer = issuer
         };
+
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);

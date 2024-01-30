@@ -2,6 +2,7 @@
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using Hangfire;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArticleAggregator.Api.Controllers;
@@ -29,7 +30,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpGet]
-    //[Authorize(Roles = "User")]
+    [Authorize]
     public async Task<IActionResult> GetArticles()
     {
         var articles = (await _articleService.GetPositive())

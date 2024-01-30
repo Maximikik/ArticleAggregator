@@ -13,7 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ArticleAggregator.Core\ArticleAggregator.Core.csproj" />
     <ProjectReference Include="..\ArticleAggregator.Data\ArticleAggregator.Data.csproj" />
-    <ProjectReference Include="..\ArticleAggregator\ArticleAggregator.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@ using ArticleAggregator.Data;
 using Hangfire;
 using Serilog;
 using Serilog.Events;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,6 @@ builder.Services.ConfigureJwt(builder.Configuration);
 var app = builder.Build();
 
 
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -42,6 +42,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.UseHangfireDashboard();
 
