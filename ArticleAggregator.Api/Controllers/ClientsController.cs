@@ -46,7 +46,7 @@ public class ClientsController : ControllerBase
         //var clientDto = _clientMapper.RegisterModelToClientDto(request);
         await _clientService.RegisterUser(request);
 
-        var client = await _clientService.GetClientByLogin(request.Login);
+        var client = await _clientService.GetClientByLogin(request.Email);
 
         //var token = await _tokenService.GenerateJwtToken(user);
 

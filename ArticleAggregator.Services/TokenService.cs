@@ -58,7 +58,7 @@ public class TokenService : ITokenService
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Email, clientDto.Login),
+                new Claim(ClaimTypes.Email, clientDto.Email),
                 new Claim(ClaimTypes.Role, clientRole.Name),
                 new Claim("Audience",audience!),
                 new Claim("Issuer",issuer!)
@@ -70,8 +70,6 @@ public class TokenService : ITokenService
             IssuedAt = DateTime.UtcNow,
             Issuer = issuer
         };
-
-        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);

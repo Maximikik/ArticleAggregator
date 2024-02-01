@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 
 namespace ArticleAggregator.Api.Controllers;
@@ -16,6 +17,7 @@ public class RssController : Controller
     }
 
     [HttpGet]
+    //[Authorize(Roles ="User")]
     public async Task<IActionResult> GetRssFeed(string rssFeedUrl)
     {
         try

@@ -3,7 +3,7 @@
 public class Client : IBaseEntity
 {
     public Guid Id { get; set; }
-    public string Login { get; set; } = null!;
+    public string Email { get; set; } = null!;
     public string PasswordHash { get; set; } = null!;
     public Guid RoleId { get; set; }
     public Role Role { get; set; } = null!;

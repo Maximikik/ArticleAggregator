@@ -30,7 +30,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
+    [Authorize(Roles = "User")]
     public async Task<IActionResult> GetArticles()
     {
         var articles = (await _articleService.GetPositive())

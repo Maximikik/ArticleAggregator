@@ -34,7 +34,7 @@ public class ClientService : IClientService
     public async Task<ClaimsIdentity> Authenticate(string userName)
     {
         var client = await _unitOfWork.ClientRepository
-            .FindBy(login => login.Login.Equals(userName))
+            .FindBy(login => login.Email.Equals(userName))
             .FirstOrDefaultAsync()
             ?? throw new NotFoundException("Client", userName);
 
@@ -42,7 +42,7 @@ public class ClientService : IClientService
 
         var claims = new List<Claim>()
         {
-            new Claim(ClaimsIdentity.DefaultNameClaimType, client.Login),
+            new Claim(ClaimsIdentity.DefaultNameClaimType, client.Email),
             new Claim(ClaimsIdentity.DefaultRoleClaimType, roleName!)
         };
 
@@ -73,7 +73,7 @@ public class ClientService : IClientService
         var client = new Client
         {
             Id = Guid.NewGuid(),
-            Login = clientDto.Login,
+            Email = clientDto.Email,
             PasswordHash = GenerateMd5Hash(clientDto.PasswordHash),
             RoleId = clientDto.RoleId
         };
@@ -145,13 +145,13 @@ public class ClientService : IClientService
 
     public async Task<bool> IsAdmin(string email)
     {
-        return (await _unitOfWork.ClientRepository.FindBy(client => client.Login.Equals(email))
+        return (await _unitOfWork.ClientRepository.FindBy(client => client.Email.Equals(email))
             .FirstOrDefaultAsync())?.Role.Name.Equals("Admin") ?? false;
     }
 
     public async Task<bool> IsPasswordCorrect(string email, string password)
     {
-        var currentPasswordHash = (await _unitOfWork.ClientRepository.FindBy(client => client.Login.Equals(email))
+        var currentPasswordHash = (await _unitOfWork.ClientRepository.FindBy(client => client.Email.Equals(email))
             .FirstOrDefaultAsync())?.PasswordHash;
 
         var enteredPasswordHash = GenerateMd5Hash(password);
@@ -161,7 +161,7 @@ public class ClientService : IClientService
 
     public async Task<bool> IsUserExists(string email)
     {
-        return await _unitOfWork.ClientRepository.FindBy(client => client.Login.Equals(email)).AnyAsync();
+        return await _unitOfWork.ClientRepository.FindBy(client => client.Email.Equals(email)).AnyAsync();
     }
 
     private string GenerateMd5Hash(string input)

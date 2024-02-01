@@ -13,6 +13,6 @@ public class ClientRepository : Repository<Client>, IClientRepository
 
     public async Task<Client> GetByLogin(string name)
     {
-        return await _dbSet.FirstOrDefaultAsync(article => article.Login.Equals(name));
+        return await _dbSet.FirstOrDefaultAsync(article => article.Email.Equals(name));
     }
 }

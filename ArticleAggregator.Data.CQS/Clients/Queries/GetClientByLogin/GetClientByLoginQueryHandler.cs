@@ -18,7 +18,7 @@ public class GetClientByLoginQueryHandler : IRequestHandler<GetClientByLoginQuer
         CancellationToken cancellationToken)
     {
         var client = await _dbContext.Clients
-            .FirstOrDefaultAsync(client => client.Login.Equals(request.Login),
+            .FirstOrDefaultAsync(client => client.Email.Equals(request.Login),
                 cancellationToken: cancellationToken)
             ?? throw new NotFoundException("Client", request.Login);
 

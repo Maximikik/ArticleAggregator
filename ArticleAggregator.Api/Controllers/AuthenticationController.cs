@@ -21,12 +21,12 @@ public class AuthenticationController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> GenerateToken(LoginModel request)
     {
-        var isClientCorrect = await _clientService.IsPasswordCorrect(request.Login, request.Password);
+        var isClientCorrect = await _clientService.IsPasswordCorrect(request.Email, request.Password);
         if (isClientCorrect)
         {
-            var clientDto = await _clientService.GetClientByLogin(request.Login);
+            var clientDto = await _clientService.GetClientByLogin(request.Email);
             var jwtToken = await _tokenService.GenerateJwtToken(clientDto);
-            var refreshToken = await _tokenService.AddRefreshToken(clientDto.Login,
+            var refreshToken = await _tokenService.AddRefreshToken(clientDto.Email,
                 HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString());
             return Ok(new TokenResponseModel { AccessToken = jwtToken, RefreshToken = refreshToken });
         }
@@ -44,7 +44,7 @@ public class AuthenticationController : ControllerBase
         {
             var clientDto = await _clientService.GetClientByRefreshToken(request.RefreshToken);
             var jwtToken = await _tokenService.GenerateJwtToken(clientDto);
-            var refreshToken = await _tokenService.AddRefreshToken(clientDto.Login,
+            var refreshToken = await _tokenService.AddRefreshToken(clientDto.Email,
                 HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString());
             await _tokenService.RemoveRefreshToken(request.RefreshToken);
             return Ok(new TokenResponseModel { AccessToken = jwtToken, RefreshToken = refreshToken });
