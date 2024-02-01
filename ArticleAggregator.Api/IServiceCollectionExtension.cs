@@ -124,7 +124,5 @@ public static class IServiceCollectionExtension
 
                 };
             });
-
-        services.AddAuthorization();
     }
 }

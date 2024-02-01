@@ -17,7 +17,7 @@ public class RssController : Controller
     }
 
     [HttpGet]
-    //[Authorize(Roles ="User")]
+    [Authorize(Roles ="User")]
     public async Task<IActionResult> GetRssFeed(string rssFeedUrl)
     {
         try
