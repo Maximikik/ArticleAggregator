@@ -20,7 +20,6 @@ public class GetArticleByIdQueryHandler : IRequestHandler<GetArticleByIdQuery, A
             .FirstOrDefaultAsync(article1 => article1.Id.Equals(request.Id),
                 cancellationToken)
             ?? throw new NotFoundException("Article", request.Id);
-        //convert to DTO
 
         return article;
     }

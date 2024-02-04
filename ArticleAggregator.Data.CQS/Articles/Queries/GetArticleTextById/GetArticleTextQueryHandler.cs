@@ -22,7 +22,5 @@ public class GetArticleTextQueryHandler : IRequestHandler<GetArticleTextQuery, s
             ?? throw new NotFoundException("Article", request.Id);
 
         return article.Title;
-
-        //convert to DTO
     }
 }

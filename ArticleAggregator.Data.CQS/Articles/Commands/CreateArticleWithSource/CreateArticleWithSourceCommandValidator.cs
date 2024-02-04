@@ -1,6 +1,13 @@
-﻿namespace ArticleAggregator.Data.CQS.Articles.Commands.CreateArticleWithSource
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Articles.Commands.CreateArticleWithSource;
+
+public class CreateArticleWithSourceCommandValidator : AbstractValidator<CreateArticleWithSourceCommand>
 {
-    internal class CreateArticleWithSourceCommandValidator
+    public CreateArticleWithSourceCommandValidator()
     {
+        RuleFor(item => item.Title).NotNull();
+        RuleFor(item => item.ArticleSourceId).NotEmpty();
+        RuleFor(item => item.Rating).GreaterThan(0).LessThan(10);
     }
 }

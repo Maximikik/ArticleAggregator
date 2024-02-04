@@ -135,7 +135,7 @@ public class Repository<T> : IRepository<T> where T : class, IBaseEntity
 
     public async Task<int> RateTextForPositivity(string text)
     {
-        OpenAIClient client = new OpenAIClient("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");
+        OpenAIClient client = new OpenAIClient("");
 
         var options = new ChatCompletionsOptions
         {

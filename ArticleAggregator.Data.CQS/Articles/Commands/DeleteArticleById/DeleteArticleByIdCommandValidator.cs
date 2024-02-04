@@ -1,6 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Articles.Commands.DeleteArticleById
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Articles.Commands.DeleteArticleById;
+
+public class DeleteArticleByIdCommandValidator : AbstractValidator<DeleteArticleByIdCommand>
 {
-    internal class DeleteArticleByIdCommandValidator
+    public DeleteArticleByIdCommandValidator()
     {
+        RuleFor(item => item.ArticleId).NotEmpty();
     }
 }

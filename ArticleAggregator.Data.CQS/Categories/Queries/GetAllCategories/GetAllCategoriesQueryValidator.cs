@@ -1,6 +1,9 @@
-﻿namespace ArticleAggregator.Data.CQS.Categories.Queries.GetAllCategories
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Categories.Queries.GetAllCategories;
+
+public class GetAllCategoriesQueryValidator : AbstractValidator<GetAllCategoriesQuery>
 {
-    internal class GetAllCategoriesQueryValidator
-    {
-    }
+    public GetAllCategoriesQueryValidator()
+    { }
 }

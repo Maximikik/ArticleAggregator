@@ -1,6 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Comments.Commands.RemoveCommentFromArticle
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Comments.Commands.RemoveCommentFromArticle;
+
+public class RemoveCommentFromArticleCommandValidator : AbstractValidator<RemoveCommentFromArticleCommand>
 {
-    internal class RemoveCommentFromArticleCommandValidator
+    public RemoveCommentFromArticleCommandValidator()
     {
+        RuleFor(item => item.CommentId).NotEmpty();
     }
 }

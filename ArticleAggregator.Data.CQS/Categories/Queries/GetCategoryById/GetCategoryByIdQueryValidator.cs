@@ -1,6 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Categories.Queries.GetCategoryById
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Categories.Queries.GetCategoryById;
+
+public class GetCategoryByIdQueryValidator : AbstractValidator<GetCategoryByIdQuery>
 {
-    internal class GetCategoryByIdQueryValidator
+    public GetCategoryByIdQueryValidator()
     {
+        RuleFor(item => item.Id).NotEmpty();
     }
 }

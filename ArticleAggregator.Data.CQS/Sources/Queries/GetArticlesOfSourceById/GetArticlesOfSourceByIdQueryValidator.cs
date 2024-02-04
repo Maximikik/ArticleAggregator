@@ -1,6 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Sources.Queries.GetArticlesOfSourceById
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Sources.Queries.GetArticlesOfSourceById;
+
+public class GetArticlesOfSourceByIdQueryValidator : AbstractValidator<GetArticlesOfSourceByIdQuery>
 {
-    internal class GetArticlesOfSourceByIdQueryValidator
+    public GetArticlesOfSourceByIdQueryValidator()
     {
+        RuleFor(item => item.Id).NotEmpty();
     }
 }

@@ -1,6 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Articles.Commands.InsertRssData
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Articles.Commands.InsertRssData;
+
+public class InsertRssDataCommandValidator : AbstractValidator<InsertRssDataCommand>
 {
-    internal class InsertRssDataCommandValidator
+    public InsertRssDataCommandValidator()
     {
+        RuleFor(item => item.Articles).NotNull();
     }
 }

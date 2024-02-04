@@ -1,6 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Categories.Commands.DeleteCategoryById
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Categories.Commands.DeleteCategoryById;
+
+public class DeleteCategoryByIdCommandValidator : AbstractValidator<DeleteCategoryByIdCommand>
 {
-    internal class DeleteCategoryByIdCommandValidator
+    public DeleteCategoryByIdCommandValidator()
     {
+        RuleFor(item => item.Id).NotEmpty();
     }
 }

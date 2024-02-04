@@ -1,6 +1,9 @@
-﻿namespace ArticleAggregator.Data.CQS.Sources.Queries.GetAllSources
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Sources.Queries.GetAllSources;
+
+public class GetAllSourcesQueryValidator : AbstractValidator<GetAllSourcesQuery>
 {
-    internal class GetAllSourcesQueryValidator
-    {
-    }
+    public GetAllSourcesQueryValidator()
+    { }
 }

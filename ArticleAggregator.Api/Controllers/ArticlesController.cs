@@ -4,6 +4,7 @@ using ArticleAggregator.Services.Interfaces;
 using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace ArticleAggregator.Api.Controllers;
 
@@ -21,21 +22,33 @@ public class ArticlesController : ControllerBase
         _articleMapper = articleMapper;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("ById")]
     public async Task<IActionResult> GetArticleById(Guid id)
     {
-        var article = _articleMapper.ArticleDtoToArticleModel(
-            await _articleService.GetArticleById(id));
+        var articleDto = await _articleService.GetArticleById(id);
+        var article = _articleMapper.ArticleDtoToArticle(articleDto!);
+
         return Ok(article);
     }
 
     [HttpGet]
-    [Authorize(Roles = "User")]
-    public async Task<IActionResult> GetArticles()
+    // [Authorize(Roles = "User")]
+    public async Task<IActionResult> GetAll()
     {
-        var articles = (await _articleService.GetPositive())
-            .Select(dto => _articleMapper.ArticleDtoToArticleModel(dto))
-            .ToArray();
+        var articlesDto = await _articleService.GetAll();
+
+        var articles = articlesDto!.Select(dto => _articleMapper.ArticleDtoToArticle(dto));
+
+        return Ok(articles);
+    }
+
+    [HttpGet("Positive")]
+   // [Authorize(Roles = "User")]
+    public async Task<IActionResult> GetPositiveArticles([FromBody] int rateGreaterThan)
+    {
+        var articlesDto = await _articleService.GetPositiveArticles(rateGreaterThan);
+
+        var articles = articlesDto!.Select(dto => _articleMapper.ArticleDtoToArticle(dto));
 
         return Ok(articles);
     }
@@ -76,9 +89,11 @@ public class ArticlesController : ControllerBase
         return Ok();
     }
 
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateArticle()
+    [HttpPatch]
+    public async Task<IActionResult> UpdateArticle(Dictionary<Guid, string> ArticlesData)
     {
+        await _articleService.UpdateArticleDescription(ArticlesData);
+
         return Ok();
     }
 }

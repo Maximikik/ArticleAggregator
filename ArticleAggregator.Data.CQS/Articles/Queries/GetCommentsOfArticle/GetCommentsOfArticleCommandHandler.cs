@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArticleAggregator.Data.CQS.Articles.Queries.GetCommentsOfArticle;
 
-public class GetCommentsOfArticleCommandHandler : IRequestHandler<GetCommentsOfArticleCommand, List<Comment>>
+public class GetCommentsOfArticleCommandHandler : IRequestHandler<GetCommentsOfArticleQuery, List<Comment>>
 {
     private readonly ArticlesAggregatorDbContext _dbContext;
     public GetCommentsOfArticleCommandHandler(ArticlesAggregatorDbContext dbContext)
     {
         _dbContext = dbContext;
     }
-    public async Task<List<Comment>> Handle(GetCommentsOfArticleCommand request, CancellationToken cancellationToken)
+    public async Task<List<Comment>> Handle(GetCommentsOfArticleQuery request, CancellationToken cancellationToken)
     {
         var article = await _dbContext.Articles.FirstOrDefaultAsync(article => article.Id.Equals(request.Id))
             ?? throw new NotFoundException("Article", request.Id); // TODO FIX

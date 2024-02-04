@@ -1,6 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Clients.Queries.GetClientByLogin
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Clients.Queries.GetClientByLogin;
+
+public class GetClientByLoginQueryValidator: AbstractValidator<GetClientByLoginQuery>
 {
-    internal class GetClientByLoginQueryValidator
+    public GetClientByLoginQueryValidator()
     {
+        RuleFor(item => item.Login).NotNull();
     }
 }

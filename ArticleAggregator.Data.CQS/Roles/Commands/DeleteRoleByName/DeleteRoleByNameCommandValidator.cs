@@ -1,6 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Roles.Commands.DeleteRoleByName
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Roles.Commands.DeleteRoleByName;
+
+public class DeleteRoleByNameCommandValidator : AbstractValidator<DeleteRoleByNameCommand>
 {
-    internal class DeleteRoleByNameCommandValidator
+    public DeleteRoleByNameCommandValidator()
     {
+        RuleFor(item => item.Name).NotNull();
     }
 }

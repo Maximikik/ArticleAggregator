@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArticleAggregator.Data.CQS.Clients.Queries.GetClientByRefreshToken;
 
-public class GetClientByRefreshTokenQueryHandler : IRequestHandler<GetUserByRefreshTokenQuery, Client>
+public class GetClientByRefreshTokenQueryHandler : IRequestHandler<GetClientByRefreshTokenQuery, Client>
 {
     private readonly ArticlesAggregatorDbContext _dbContext;
 
@@ -14,7 +14,7 @@ public class GetClientByRefreshTokenQueryHandler : IRequestHandler<GetUserByRefr
         _dbContext = articlesAggregatorDbContext;
     }
 
-    public async Task<Client> Handle(GetUserByRefreshTokenQuery request, CancellationToken cancellationToken)
+    public async Task<Client> Handle(GetClientByRefreshTokenQuery request, CancellationToken cancellationToken)
     {
         var refreshToken = await _dbContext.RefreshTokens
             .FirstOrDefaultAsync(rt => rt.Id.Equals(request.RefreshTokenId),

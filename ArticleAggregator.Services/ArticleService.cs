@@ -1,7 +1,12 @@
 ﻿using ArticleAggregator.Core.Dto;
 using ArticleAggregator.Data.CQS.Articles.Commands.CreateArticle;
+using ArticleAggregator.Data.CQS.Articles.Commands.DeleteArticleById;
 using ArticleAggregator.Data.CQS.Articles.Commands.InsertRssData;
+using ArticleAggregator.Data.CQS.Articles.Commands.UpdateArticleText;
 using ArticleAggregator.Data.CQS.Articles.Queries.GetArticleById;
+using ArticleAggregator.Data.CQS.Articles.Queries.GetArticleByName;
+using ArticleAggregator.Data.CQS.Articles.Queries.GetCommentsOfArticle;
+using ArticleAggregator.Data.CQS.Articles.Queries.GetPositive;
 using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
@@ -66,6 +71,17 @@ public class ArticleService : IArticleService
         await _mediator.Send(command);
     }
 
+    public async Task<ArticleDto[]?> GetAll()
+    {
+        var request = new GetPositiveArticlesQuery { rateGreaterThan = 0 };
+
+        var articles = await _mediator.Send(request);
+
+        var articlesDto = articles.Select(article => _articleMapper.ArticleToArticleDto(article)).ToArray();
+
+        return articlesDto;
+    }
+
     private async Task<string[]> GetExistedArticlesUrls()
     {
         var existedArticlesUrls = await _unitOfWork.ArticleRepository.GetAsQueryable()
@@ -86,18 +102,10 @@ public class ArticleService : IArticleService
         throw new NotImplementedException();
     }
 
-    public async Task RateArticles(ArticleDto[] articleDtos)
-    {
-        foreach (var item in articleDtos)
-        {
-            await _unitOfWork.ArticleRepository.RateTextForPositivity(item.Description);
-        }
-    }
-
     public async Task DeleteArticle(Guid id)
     {
-        await _unitOfWork.ArticleRepository.DeleteById(id);
-        await _unitOfWork.Commit();
+        var command = new DeleteArticleByIdCommand { ArticleId = id };
+        await _mediator.Send(command);
     }
 
     public async Task<ArticleDto?> GetArticleById(Guid id)
@@ -108,23 +116,23 @@ public class ArticleService : IArticleService
         return articleDto;
     }
 
-    public async Task<ArticleDto[]?> GetArticlesByName(string name)
+    public async Task<ArticleDto?> GetArticleByTitle(string name)
     {
-        var articles = await _unitOfWork.ArticleRepository
-                .FindBy(article => EF.Functions.Like(article.Title, $"%{name}"))
-                .Select(article => _articleMapper.ArticleToArticleDto(article))
-                .ToArrayAsync();
-        return articles;
+        var request = new GetArticleByTitleQuery { ArticleTitle = name };
+        var article = await _mediator.Send(request);
+
+        return _articleMapper.ArticleToArticleDto(article);
     }
 
-    public async Task<ArticleDto[]?> GetPositive()
+    public async Task<ArticleDto[]?> GetPositiveArticles(int rateGreaterThan = 5)
     {
-        var articles = await _unitOfWork.ArticleRepository
-                .GetAsQueryable()
-                //.FindBy(article => article.Rate>=0)
-                .Select(article => _articleMapper.ArticleToArticleDto(article))
-                .ToArrayAsync();
-        return articles;
+        var request = new GetPositiveArticlesQuery { rateGreaterThan = rateGreaterThan };
+
+        var articles = await _mediator.Send(request);
+
+        var articlesDto = articles.Select(article => _articleMapper.ArticleToArticleDto(article)).ToArray();
+
+        return articlesDto;
     }
 
     public async Task<CommentDto[]?> GetCommentsOfArticle(Guid id)
@@ -132,10 +140,22 @@ public class ArticleService : IArticleService
         var article = await _unitOfWork.ArticleRepository.GetById(id)
             ?? throw new NotFoundException("Article", id);
 
-        var comments = await _unitOfWork.CommentRepository.GetArticleComments(article);
+        var request = new GetCommentsOfArticleQuery { Id = id };
+        var comments = await _mediator.Send(request);
 
         var commentsDto = comments.Select(comment => _commentMapper.CommentToCommentDto(comment)).ToArray();
 
         return commentsDto;
+    }
+
+    public async Task UpdateArticleDescription(Dictionary<Guid, string> ArticlesData)
+    {
+       var command = new UpdateArticleTextCommand { ArticlesData = ArticlesData };
+       await _mediator.Send(command);
+    }
+
+    public async Task<int> RateText(string text)
+    {
+        return await _unitOfWork.ArticleRepository.RateTextForPositivity(text);
     }
 }

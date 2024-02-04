@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ArticleAggregator.Data.CQS.Articles.Queries.GetArticleById;
+using FluentValidation;
 
-namespace ArticleAggregator.Data.CQS.Articles.Queries.GetCommentsOfArticle
+namespace ArticleAggregator.Data.CQS.Articles.Queries.GetCommentsOfArticle;
+
+public class GetCommentsOfArticleCommandValidator : AbstractValidator<GetCommentsOfArticleQuery>
 {
-    internal class GetCommentsOfArticleCommandValidator
+    public GetCommentsOfArticleCommandValidator()
     {
+        RuleFor(item => item.Id).NotEmpty();
     }
 }

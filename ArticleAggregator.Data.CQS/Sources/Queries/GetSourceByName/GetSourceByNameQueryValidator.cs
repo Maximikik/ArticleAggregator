@@ -1,5 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Sources.Queries.GetSourceByName;
+﻿using FluentValidation;
 
-internal class GetSourceByNameQueryValidator
+namespace ArticleAggregator.Data.CQS.Sources.Queries.GetSourceByName;
+
+public  class GetSourceByNameQueryValidator : AbstractValidator<GetSourceByNameQuery>
 {
+    public GetSourceByNameQueryValidator()
+    {
+        RuleFor(item => item.Name).NotNull();
+    }
 }

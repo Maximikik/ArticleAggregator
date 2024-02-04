@@ -1,6 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Categories.Queries.GetCategoryByName
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Categories.Queries.GetCategoryByName;
+
+public class GetCategoryByNameQueryValidator : AbstractValidator<GetCategoryByNameQuery>
 {
-    internal class GetCategoryByNameQueryValidator
+    public GetCategoryByNameQueryValidator()
     {
+        RuleFor(item => item.Name).NotNull();
     }
 }

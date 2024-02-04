@@ -5,5 +5,5 @@ namespace ArticleAggregator.Data.CQS.Roles.Commands.CreateRole;
 
 public class CreateRoleCommand : IRequest
 {
-    public RoleDto RoleDto { get; set; }
+    public RoleDto RoleDto { get; set; } = null!;
 }

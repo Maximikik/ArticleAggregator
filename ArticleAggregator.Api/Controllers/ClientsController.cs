@@ -21,36 +21,44 @@ public class ClientsController : ControllerBase
         _tokenService = tokenService;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var clientsDto = await _clientService.GetAllClients();
+
+        var clients = clientsDto!.Select(dto => _clientMapper.ClientDtoToClient(dto));
+
+        return Ok(clients);
+    }
+
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserById(Guid id)
+    public async Task<IActionResult> GetClientById(Guid id)
     {
         var clientDto = await _clientService.GetClientById(id);
 
-        var client = _clientMapper.ClientDtoToClient(clientDto);
+        var client = _clientMapper.ClientDtoToClient(clientDto!);
 
         return Ok(client);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetUsers(/*filter*/)
+    [HttpGet("{roleName}")]
+    public async Task<IActionResult> GetClientsByRole(string roleName)
     {
-        //return Ok(await _clientService.GetAllClients());
-        return Ok(await _clientService.GetClientByRole());
+        var clientsDto = await _clientService.GetClientsByRole(roleName);
+
+        var clients =  clientsDto!.Select(dto => _clientMapper.ClientDtoToClient(dto));
+
+        return Ok(clients);
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateClient(ClientDto request)
     {
-        //validation
-
-        //var clientDto = _clientMapper.RegisterModelToClientDto(request);
         await _clientService.RegisterUser(request);
 
         var client = await _clientService.GetClientByLogin(request.Email);
 
-        //var token = await _tokenService.GenerateJwtToken(user);
-
-        return Created($"users/{client.Id}", null);
+        return Created($"clients/{client!.Id}", null);
     }
 
     [HttpDelete("{id}")]

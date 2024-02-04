@@ -1,6 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Clients.Queries.GetClientByRefreshToken
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Clients.Queries.GetClientByRefreshToken;
+
+public class GetClientByRefreshTokenQueryValidator : AbstractValidator<GetClientByRefreshTokenQuery>
 {
-    internal class GetClientByRefreshTokenQueryValidator
+    public GetClientByRefreshTokenQueryValidator()
     {
+        RuleFor(item => item.RefreshTokenId).NotEmpty();
     }
 }

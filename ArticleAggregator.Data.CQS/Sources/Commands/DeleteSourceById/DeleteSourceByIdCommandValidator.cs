@@ -1,6 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Sources.Commands.DeleteSourceById
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Sources.Commands.DeleteSourceById;
+
+public class DeleteSourceByIdCommandValidator : AbstractValidator<DeleteSourceByIdCommand>
 {
-    internal class DeleteSourceByIdCommandValidator
+    public DeleteSourceByIdCommandValidator()
     {
+        RuleFor(item => item.Id).NotEmpty();
     }
 }

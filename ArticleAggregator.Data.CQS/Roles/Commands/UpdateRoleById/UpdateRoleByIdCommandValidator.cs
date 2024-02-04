@@ -1,6 +1,12 @@
-﻿namespace ArticleAggregator.Data.CQS.Roles.Commands.UpdateRoleById
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Roles.Commands.UpdateRoleById;
+
+public class UpdateRoleByIdCommandValidator : AbstractValidator<UpdateRoleByIdCommand>
 {
-    internal class UpdateRoleByIdCommandValidator
+    public UpdateRoleByIdCommandValidator()
     {
+        RuleFor(item  => item.Id).NotEmpty();
+        RuleFor(item  => item.Name).NotNull();
     }
 }

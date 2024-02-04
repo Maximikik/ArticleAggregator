@@ -1,6 +1,11 @@
-﻿namespace ArticleAggregator.Data.CQS.Clients.Queries.GetClientById
+﻿using FluentValidation;
+
+namespace ArticleAggregator.Data.CQS.Clients.Queries.GetClientById;
+
+public class GetClientByIdQueryValidator : AbstractValidator<GetClientByIdQuery>
 {
-    internal class GetClientByIdQueryValidator
+    public GetClientByIdQueryValidator()
     {
+        RuleFor(item => item.Id).NotEmpty();
     }
 }

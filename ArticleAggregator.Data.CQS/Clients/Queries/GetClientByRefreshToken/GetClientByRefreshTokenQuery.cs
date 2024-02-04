@@ -3,7 +3,7 @@ using MediatR;
 
 namespace ArticleAggregator.Data.CQS.Clients.Queries.GetClientByRefreshToken;
 
-public class GetUserByRefreshTokenQuery : IRequest<Client>
+public class GetClientByRefreshTokenQuery : IRequest<Client>
 {
     public Guid RefreshTokenId { get; set; }
 }

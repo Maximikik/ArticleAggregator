@@ -2,6 +2,7 @@
 using ArticleAggregator.Data.CQS.Clients.Queries.GetClientById;
 using ArticleAggregator.Data.CQS.Clients.Queries.GetClientByLogin;
 using ArticleAggregator.Data.CQS.Clients.Queries.GetClientByRefreshToken;
+using ArticleAggregator.Data.CQS.Clients.Queries.GetClientByRole;
 using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
@@ -104,15 +105,14 @@ public class ClientService : IClientService
         return clientsDto;
     }
 
-    public async Task<ClientDto?> GetClientByRole()
+    public async Task<ClientDto[]?> GetClientsByRole(string roleName)
     {
-        var role = await _unitOfWork.RoleRepository.GetById(Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa7"));
+        var request = new GetClientsByRoleQuery { roleName = roleName };
+        var client = await _mediator.Send(request);
 
-        var client = role.Clients.First();
+        var clientsDto = client.Select(client => _clientMapper.ClientToClientDto(client)).ToArray();
 
-        var clientDto = _clientMapper.ClientToClientDto(client);
-
-        return clientDto;
+        return clientsDto;
     }
 
     public async Task<ClientDto?> GetClientById(Guid id)
@@ -137,7 +137,7 @@ public class ClientService : IClientService
 
     public async Task<ClientDto> GetClientByRefreshToken(Guid refreshToken)
     {
-        var user = await _mediator.Send(new GetUserByRefreshTokenQuery { RefreshTokenId = refreshToken });
+        var user = await _mediator.Send(new GetClientByRefreshTokenQuery { RefreshTokenId = refreshToken });
 
         var dto = _clientMapper.ClientToClientDto(user);
         return dto;
