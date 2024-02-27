@@ -44,6 +44,7 @@ public class SourceController : ControllerBase
     public async Task<IActionResult> GetArticlesOfSourceById(Guid id)
     {
         var sources = await _sourceController.GetArticlesOfSourceById(id);
+
         return Ok(sources);
     }
 

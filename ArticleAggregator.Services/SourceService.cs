@@ -9,6 +9,7 @@ using ArticleAggregator.Data.CQS.Sources.Queries.GetSourceByName;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;
+using Hangfire;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
@@ -21,6 +22,7 @@ public class SourceService : ISourceService
     private readonly ArticleMapper _articleMapper;
     private readonly IMediator _mediator;
     private readonly IConfiguration _configuration;
+
     public SourceService(IUnitOfWork unitOfWork,
       SourceMapper sourceMapper, ArticleMapper articleMapper, IMediator mediator, IConfiguration configuration)
     {

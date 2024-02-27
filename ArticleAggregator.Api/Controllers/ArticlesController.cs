@@ -1,4 +1,5 @@
 ﻿using ArticleAggregator.Core.Models;
+using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using Hangfire;
@@ -53,30 +54,25 @@ public class ArticlesController : ControllerBase
         return Ok(articles);
     }
 
-    //[HttpGet("{amount}")]
-    ////[Authorize(Roles = "User")]
-    //public async Task<IActionResult> GetLatestArticles(int amount = 15)
-    //{
-    //    //var articles = (await _articleService.GetPositive())
-    //    //    .Select(dto => _articleMapper.ArticleDtoToArticleModel(dto))
-    //    //    .ToArray();
-
-    //    var articles = await _articleService.GetLatest();
-
-    //    RecurringJob.AddOrUpdate(
-    //        "TestRecurringJob",
-    //        () => await _articleService.RateText(), "* 8-17 * * Mon-Fri");
-
-
-    //    return Ok(articles);
-    //}
-
     [HttpPost]
     public async Task<IActionResult> CreateArticle(ArticleModel request)
     {
         var dto = _articleMapper.ArticleModelToArticleDto(request);
 
         await _articleService.CreateArticle(dto);
+
+        string urlToResourse = "";
+        return Created(urlToResourse, null);
+    }
+
+    [HttpPost("InsertRss")]
+    public async Task<IActionResult> InsertArticlesFromRssFeed(Guid sourceId)
+    {
+        await _articleService.InsertArticlesFromRssByArticleSourceId(sourceId);
+
+        RecurringJob.AddOrUpdate(
+        "TestRecurringJob",
+            () => _articleService.InsertArticlesFromRssByArticleSourceId(sourceId), "0 0 * * *");
 
         string urlToResourse = "";
         return Created(urlToResourse, null);

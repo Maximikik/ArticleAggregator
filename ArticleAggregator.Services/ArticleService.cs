@@ -7,6 +7,8 @@ using ArticleAggregator.Data.CQS.Articles.Queries.GetArticleById;
 using ArticleAggregator.Data.CQS.Articles.Queries.GetArticleByName;
 using ArticleAggregator.Data.CQS.Articles.Queries.GetCommentsOfArticle;
 using ArticleAggregator.Data.CQS.Articles.Queries.GetPositive;
+using ArticleAggregator.Data.CQS.Categories.Commands.CreateCategory;
+using ArticleAggregator.Data.CQS.Categories.Queries.GetCategoryByName;
 using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
@@ -44,17 +46,39 @@ public class ArticleService : IArticleService
         using (var reader = XmlReader.Create(articleSourceRss))
         {
             var feed = SyndicationFeed.Load(reader);
+
+            feed.Categories.Select(async item => await _mediator.Send(new CreateCategoryCommand
+            {
+                CategoryDto = new CategoryDto
+                {
+                    Id = Guid.NewGuid(),
+                    Name = item.Name,
+                    PositivityRating = 1
+                }
+            }));
+
+            var categoriesId = new List<Guid>();
+
+            foreach (var category in feed.Categories)
+            {
+                categoriesId.Add((await _mediator.Send(new GetCategoryByNameQuery { Name = category.Name })).Id);
+            }
+
             var rssArticles = feed.Items.Select(item => new ArticleDto()
             {
                 Id = Guid.NewGuid(),
                 ArticleSourceId = sourceId,
                 Title = item.Title.Text,
+                Rating = 0,
+                Description = item.Summary.Text,
+                CategoriesId = categoriesId
             }).ToArray();
+
             return rssArticles;
         }
     }
 
-    public async Task AggregateArticlesFromRssByArticleSourceId(Guid sourceId)
+    public async Task InsertArticlesFromRssByArticleSourceId(Guid sourceId)
     {
         var data = await AggregateDataFromRssByArticleSourceId(sourceId);
 

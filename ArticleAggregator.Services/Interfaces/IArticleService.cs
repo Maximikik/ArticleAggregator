@@ -4,7 +4,7 @@ namespace ArticleAggregator.Services.Interfaces;
 
 public interface IArticleService
 {
-    public Task AggregateArticlesFromRssByArticleSourceId(Guid sourceId);
+    public Task InsertArticlesFromRssByArticleSourceId(Guid sourceId);
 
     public Task<ArticleDto[]?> GetAll();
     public Task<ArticleDto?> GetArticleById(Guid id);

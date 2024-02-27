@@ -26,6 +26,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.RegisterServices(builder.Configuration);
 builder.Services.ConfigureJwt(builder.Configuration);
 
+var cors = "AllowAll";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(cors, policy =>
+    {
+        policy.WithOrigins("https://localhost:4200");
+    });
+});
+
 var app = builder.Build();
 
 
@@ -40,6 +49,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(cors);
 
 app.UseAuthentication();
 app.UseAuthorization();
