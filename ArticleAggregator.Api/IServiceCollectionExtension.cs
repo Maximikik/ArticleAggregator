@@ -8,6 +8,7 @@ using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;
 using ArticleAggregator_Repositories.Interfaces;
 using ArticleAggregator_Repositories.Repositories;
+using FeedAggregator.Services.Interfaces;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -40,10 +41,12 @@ public static class IServiceCollectionExtension
         services.AddScoped<ISourceRepository, SourceRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IClientRepository, ClientRepository>();
+        services.AddScoped<IFeedRepository, FeedRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IArticleService, ArticleService>();
+        services.AddScoped<IFeedService, FeedService>();
         services.AddScoped<ISourceService, SourceService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IClientService, ClientService>();
@@ -59,6 +62,7 @@ public static class IServiceCollectionExtension
         services.AddScoped<SourceMapper>();
         services.AddScoped<CommentMapper>();
         services.AddScoped<RoleMapper>();
+        services.AddScoped<FeedMapper>();
 
         services.AddHangfire(configuration => configuration
            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)

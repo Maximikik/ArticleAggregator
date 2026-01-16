@@ -7,6 +7,9 @@ public class Article : IBaseEntity
     public string Description { get; set; } = null!;
     public int? Rating { get; set; }
     public Guid ArticleSourceId { get; set; }
+    public Guid? FeedId { get; set; }
+
+    public virtual Feed? Feed { get; set; }
 
     public virtual Source ArticleSource { get; set; } = null!;
     public virtual List<Category> Categories { get; set; } = null!;

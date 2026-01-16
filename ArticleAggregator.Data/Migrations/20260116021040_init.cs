@@ -1,21 +1,34 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace ArticleAggregator.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class RefreshToken : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Feeds",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Feeds", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,10 +39,10 @@ namespace ArticleAggregator.Data.Migrations
                 name: "Sources",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RssUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Url = table.Column<string>(type: "text", nullable: false),
+                    RssUrl = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,10 +53,10 @@ namespace ArticleAggregator.Data.Migrations
                 name: "Clients",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,14 +73,21 @@ namespace ArticleAggregator.Data.Migrations
                 name: "Articles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Rating = table.Column<double>(type: "float", nullable: true),
-                    ArticleSourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Rating = table.Column<int>(type: "integer", nullable: true),
+                    ArticleSourceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FeedId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Articles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Articles_Feeds_FeedId",
+                        column: x => x.FeedId,
+                        principalTable: "Feeds",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Articles_Sources_ArticleSourceId",
                         column: x => x.ArticleSourceId,
@@ -80,11 +100,11 @@ namespace ArticleAggregator.Data.Migrations
                 name: "RefreshTokens",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GeneratedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExpiringAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AssociatedDeviceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    GeneratedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ExpiringAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    AssociatedDeviceName = table.Column<string>(type: "text", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,11 +121,11 @@ namespace ArticleAggregator.Data.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Rating = table.Column<double>(type: "float", nullable: false),
-                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Rating = table.Column<double>(type: "double precision", nullable: false),
+                    ArticleId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -126,12 +146,12 @@ namespace ArticleAggregator.Data.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ParentCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ArticleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ParentCommentId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -159,6 +179,11 @@ namespace ArticleAggregator.Data.Migrations
                 name: "IX_Articles_ArticleSourceId",
                 table: "Articles",
                 column: "ArticleSourceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Articles_FeedId",
+                table: "Articles",
+                column: "FeedId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_ArticleId",
@@ -213,6 +238,9 @@ namespace ArticleAggregator.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "Feeds");
 
             migrationBuilder.DropTable(
                 name: "Sources");

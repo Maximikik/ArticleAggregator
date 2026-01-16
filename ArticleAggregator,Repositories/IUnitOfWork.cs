@@ -15,6 +15,7 @@ public interface IUnitOfWork
     public ICommentRepository CommentRepository { get; }
 
     public IRoleRepository RoleRepository { get; }
+    public IFeedRepository FeedRepository { get; }
 
     Task<int> Commit();
 }

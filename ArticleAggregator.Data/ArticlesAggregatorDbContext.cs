@@ -6,6 +6,7 @@ namespace ArticleAggregator.Data;
 public class ArticlesAggregatorDbContext : DbContext
 {
     public DbSet<Article> Articles { get; set; }
+    public DbSet<Feed> Feeds { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Client> Clients { get; set; }
     public DbSet<Source> Sources { get; set; }
@@ -16,5 +17,11 @@ public class ArticlesAggregatorDbContext : DbContext
     public ArticlesAggregatorDbContext(DbContextOptions<ArticlesAggregatorDbContext> options)
         : base(options)
     {
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+    {
+        optionsBuilder.UseNpgsql("Host=localhost;Database=ArticlesAggregator;Username=postgres;Password=qaz@wsx12345");
     }
 }
