@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Hangfire" Version="1.8.9" />
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.20.13" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
@@ -17,6 +18,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
     <PackageReference Include="Riok.Mapperly" Version="3.4.0-next.2" />
     <PackageReference Include="Serilog" Version="3.1.2-dev-02097" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />

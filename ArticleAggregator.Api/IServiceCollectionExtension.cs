@@ -9,6 +9,7 @@ using ArticleAggregator_Repositories;
 using ArticleAggregator_Repositories.Interfaces;
 using ArticleAggregator_Repositories.Repositories;
 using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -24,7 +25,7 @@ public static class IServiceCollectionExtension
     {
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<ArticlesAggregatorDbContext>(opt =>
-            opt.UseSqlServer(connectionString));
+            opt.UseNpgsql(connectionString));
 
         services.AddScoped<IRepository<Article>, Repository<Article>>();
         services.AddScoped<IRepository<Source>, Repository<Source>>();
@@ -60,10 +61,14 @@ public static class IServiceCollectionExtension
         services.AddScoped<RoleMapper>();
 
         services.AddHangfire(configuration => configuration
-            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-            .UseSimpleAssemblyNameTypeSerializer()
-            .UseRecommendedSerializerSettings()
-            .UseSqlServerStorage(connectionString));
+           .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+           .UseSimpleAssemblyNameTypeSerializer()
+           .UseRecommendedSerializerSettings()
+           .UsePostgreSqlStorage(options =>
+           {
+               options.UseNpgsqlConnection(connectionString);
+           }));
+
 
         services.AddSwaggerGen(c =>
         {

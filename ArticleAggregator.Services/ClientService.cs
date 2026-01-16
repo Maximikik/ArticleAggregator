@@ -69,7 +69,8 @@ public class ClientService : IClientService
 
     public async Task RegisterUser(ClientDto clientDto)
     {
-        var clientRole = await _unitOfWork.RoleRepository.FindBy(role => role.Name.Equals("User")).FirstOrDefaultAsync();
+        var clientRole = await _unitOfWork.RoleRepository.FindBy(role => role.Name.Equals("User")).FirstOrDefaultAsync()
+            ?? throw new Exception("rafals timoha");
 
         var client = new Client
         {
@@ -80,7 +81,15 @@ public class ClientService : IClientService
         };
 
         await _unitOfWork.ClientRepository.InsertOne(client);
-        clientRole.Clients.Add(client);
+
+        if (clientRole.Clients != null)
+        {
+            clientRole.Clients.Add(client);
+        }
+        else
+        {
+            clientRole.Clients = [client];
+        }
 
         await _unitOfWork.Commit();
     }

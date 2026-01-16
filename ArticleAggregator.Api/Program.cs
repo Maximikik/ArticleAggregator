@@ -3,7 +3,6 @@ using ArticleAggregator.Data;
 using Hangfire;
 using Serilog;
 using Serilog.Events;
-using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +30,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(cors, policy =>
     {
-        policy.WithOrigins("https://localhost:4200");
+        policy.WithOrigins("http://localhost:4200");
+        policy.AllowAnyHeader();
+        policy.AllowAnyMethod();
+        policy.AllowCredentials();
     });
 });
 

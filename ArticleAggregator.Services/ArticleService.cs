@@ -71,7 +71,8 @@ public class ArticleService : IArticleService
                 Title = item.Title.Text,
                 Rating = 0,
                 Description = item.Summary.Text,
-                CategoriesId = categoriesId
+                CategoriesId = categoriesId,
+                SourceUrl = articleSourceRss,
             }).ToArray();
 
             return rssArticles;
@@ -174,8 +175,8 @@ public class ArticleService : IArticleService
 
     public async Task UpdateArticleDescription(Dictionary<Guid, string> ArticlesData)
     {
-       var command = new UpdateArticleTextCommand { ArticlesData = ArticlesData };
-       await _mediator.Send(command);
+        var command = new UpdateArticleTextCommand { ArticlesData = ArticlesData };
+        await _mediator.Send(command);
     }
 
     public async Task<int> RateText(string text)
