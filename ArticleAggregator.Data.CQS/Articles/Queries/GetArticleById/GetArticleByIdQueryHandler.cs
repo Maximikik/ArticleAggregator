@@ -1,26 +1,20 @@
-﻿using ArticleAggregator.Data.CustomExceptions;
+﻿using ArticleAggregator.Core.Models;
+using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Data.Entities;
+using ArticleAggregator.Mapping;
+using ArticleAggregator_Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace ArticleAggregator.Data.CQS.Articles.Queries.GetArticleById;
 
-public class GetArticleByIdQueryHandler : IRequestHandler<GetArticleByIdQuery, Article>
+public class GetArticleByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetArticleByIdQuery, ArticleModel>
 {
-    private readonly ArticlesAggregatorDbContext _dbContext;
-
-    public GetArticleByIdQueryHandler(ArticlesAggregatorDbContext dbContext)
+    public async Task<ArticleModel> Handle(GetArticleByIdQuery request, CancellationToken cancellationToken)
     {
-        _dbContext = dbContext;
-    }
-
-    public async Task<Article> Handle(GetArticleByIdQuery request, CancellationToken cancellationToken)
-    {
-        var article = await _dbContext.Articles
-            .FirstOrDefaultAsync(article1 => article1.Id.Equals(request.Id),
-                cancellationToken)
+        var article = await unitOfWork.ArticleRepository
+            .GetById(request.Id)
             ?? throw new NotFoundException("Article", request.Id);
 
-        return article;
+        return mapper.Map<Article, ArticleModel>(article);
     }
 }

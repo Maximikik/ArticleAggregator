@@ -1,4 +1,5 @@
 ﻿using ArticleAggregator.Core.Dto;
+using ArticleAggregator.Core.Models;
 using System.Security.Claims;
 
 namespace ArticleAggregator.Services.Interfaces;
@@ -11,11 +12,11 @@ public interface IClientService
     public Task<ClaimsIdentity> Authenticate(string userName);
     public Task<bool> IsPasswordCorrect(string email, string password);
 
-    public Task<ClientDto[]?> GetAllClients();
-    public Task<ClientDto[]?> GetClientsByRole(string roleName);
-    public Task<ClientDto?> GetClientById(Guid id);
-    public Task<ClientDto?> GetClientByLogin(string login);
-    Task<ClientDto> GetClientByRefreshToken(Guid refreshToken);
+    public Task<ClientModel[]> GetAllClients();
+    public Task<ClientModel[]> GetClientsByRole(string roleName);
+    public Task<ClientModel> GetClientById(Guid id);
+    public Task<ClientModel> GetClientByLogin(string login);
+    Task<ClientModel> GetClientByRefreshToken(Guid refreshToken);
 
     public Task DeleteClient(Guid id);
 }

@@ -11,6 +11,5 @@ public class CreateArticleCommandValidator : AbstractValidator<CreateArticleComm
         RuleFor(item => item.ArticleDto.ArticleSourceId).NotEmpty();
         RuleFor(item => item.ArticleDto.Title).NotNull();
         RuleFor(item => item.ArticleDto.Description).NotNull();
-        RuleFor(item => item.ArticleDto.Id).NotEmpty();
     }
 }

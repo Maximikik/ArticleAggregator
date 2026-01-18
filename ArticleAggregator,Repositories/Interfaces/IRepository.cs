@@ -27,4 +27,5 @@ public interface IRepository<T> where T : class, IBaseEntity
     Task<int> RateTextForPositivity(string article);
 
     Task<int> Count();
+    Task<int> SaveChangesAsync();
 }

@@ -27,7 +27,7 @@ public class AuthenticationController : ControllerBase
             var clientDto = await _clientService.GetClientByLogin(request.Email);
             var jwtToken = await _tokenService.GenerateJwtToken(clientDto);
             var refreshToken = await _tokenService.AddRefreshToken(clientDto.Email,
-                HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString());
+                HttpContext.Connection.RemoteIpAddress!.MapToIPv4().ToString());
             return Ok(new TokenResponseModel { AccessToken = jwtToken, RefreshToken = refreshToken });
         }
 

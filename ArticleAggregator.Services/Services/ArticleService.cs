@@ -1,15 +1,13 @@
 ﻿using ArticleAggregator.Core.Dto;
+using ArticleAggregator.Core.Models;
 using ArticleAggregator.Data.CQS.Articles.Commands.CreateArticle;
 using ArticleAggregator.Data.CQS.Articles.Commands.DeleteArticleById;
 using ArticleAggregator.Data.CQS.Articles.Commands.InsertRssData;
 using ArticleAggregator.Data.CQS.Articles.Commands.UpdateArticleText;
 using ArticleAggregator.Data.CQS.Articles.Queries.GetArticleById;
-using ArticleAggregator.Data.CQS.Articles.Queries.GetArticleByName;
-using ArticleAggregator.Data.CQS.Articles.Queries.GetCommentsOfArticle;
 using ArticleAggregator.Data.CQS.Articles.Queries.GetPositive;
 using ArticleAggregator.Data.CQS.Categories.Commands.CreateCategory;
 using ArticleAggregator.Data.CQS.Categories.Queries.GetCategoryByName;
-using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;
@@ -19,26 +17,13 @@ using Microsoft.Extensions.Configuration;
 using System.ServiceModel.Syndication;
 using System.Xml;
 
-namespace ArticleAggregator.Services;
+namespace ArticleAggregator.Services.Services;
 
-public class ArticleService : IArticleService
+public class ArticleService(IUnitOfWork _unitOfWork,
+    IMapper _mapper,
+    IMediator _mediator, IConfiguration _configuration
+    ) : IArticleService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ArticleMapper _articleMapper;
-    private readonly CommentMapper _commentMapper;
-    private readonly IMediator _mediator;
-    private readonly IConfiguration _configuration;
-
-    public ArticleService(IUnitOfWork unitOfWork,
-       ArticleMapper articleMapper, CommentMapper commentMapper, IMediator mediator, IConfiguration configuration)
-    {
-        _unitOfWork = unitOfWork;
-        _articleMapper = articleMapper;
-        _commentMapper = commentMapper;
-        _mediator = mediator;
-        _configuration = configuration;
-    }
-
     public async Task<ArticleDto[]?> AggregateDataFromRssByArticleSourceId(Guid sourceId)
     {
         var articleSourceRss = (await _unitOfWork.SourceRepository.GetById(sourceId))?.RssUrl;
@@ -66,7 +51,6 @@ public class ArticleService : IArticleService
 
             var rssArticles = feed.Items.Select(item => new ArticleDto()
             {
-                Id = Guid.NewGuid(),
                 ArticleSourceId = sourceId,
                 Title = item.Title.Text,
                 Rating = 0,
@@ -85,7 +69,7 @@ public class ArticleService : IArticleService
 
         var existedArticles = await GetExistedArticlesUrls();
 
-        var uniqueArticles = data
+        var uniqueArticles = data!
             .Where(dto => !existedArticles
                 .Any(url => dto.SourceUrl.Equals(url))).ToArray();
 
@@ -96,15 +80,9 @@ public class ArticleService : IArticleService
         await _mediator.Send(command);
     }
 
-    public async Task<ArticleDto[]?> GetAll()
+    public async Task<IEnumerable<ArticleModel>> GetAll()
     {
-        var request = new GetPositiveArticlesQuery { rateGreaterThan = 0 };
-
-        var articles = await _mediator.Send(request);
-
-        var articlesDto = articles.Select(article => _articleMapper.ArticleToArticleDto(article)).ToArray();
-
-        return articlesDto;
+        return await _mediator.Send(new GetPositiveArticlesQuery { rateGreaterThan = 0 });
     }
 
     private async Task<string[]> GetExistedArticlesUrls()
@@ -114,12 +92,9 @@ public class ArticleService : IArticleService
         return existedArticlesUrls;
     }
 
-    public async Task<Guid> CreateArticle(ArticleDto dto)
+    public async Task CreateArticle(ArticleDto dto)
     {
-        var command = new CreateArticleCommand() { ArticleDto = dto };
-        var id = command.ArticleDto.Id;
-        await _mediator.Send(command);
-        return id;
+        await _mediator.Send(new CreateArticleCommand() { ArticleDto = dto });
     }
 
     public Task CreateArticleAndSource(ArticleDto articleDto, SourceDto? sourceDto)
@@ -133,44 +108,14 @@ public class ArticleService : IArticleService
         await _mediator.Send(command);
     }
 
-    public async Task<ArticleDto?> GetArticleById(Guid id)
+    public async Task<ArticleModel?> GetArticleById(Guid id)
     {
-        var articleDto = _articleMapper.ArticleToArticleDto(
-                await _mediator.Send(new GetArticleByIdQuery { Id = id }));
-
-        return articleDto;
+        return await _mediator.Send(new GetArticleByIdQuery { Id = id });
     }
 
-    public async Task<ArticleDto?> GetArticleByTitle(string name)
+    public async Task<IEnumerable<ArticleModel>> GetPositiveArticles(int rateGreaterThan = 5)
     {
-        var request = new GetArticleByTitleQuery { ArticleTitle = name };
-        var article = await _mediator.Send(request);
-
-        return _articleMapper.ArticleToArticleDto(article);
-    }
-
-    public async Task<ArticleDto[]?> GetPositiveArticles(int rateGreaterThan = 5)
-    {
-        var request = new GetPositiveArticlesQuery { rateGreaterThan = rateGreaterThan };
-
-        var articles = await _mediator.Send(request);
-
-        var articlesDto = articles.Select(article => _articleMapper.ArticleToArticleDto(article)).ToArray();
-
-        return articlesDto;
-    }
-
-    public async Task<CommentDto[]?> GetCommentsOfArticle(Guid id)
-    {
-        var article = await _unitOfWork.ArticleRepository.GetById(id)
-            ?? throw new NotFoundException("Article", id);
-
-        var request = new GetCommentsOfArticleQuery { Id = id };
-        var comments = await _mediator.Send(request);
-
-        var commentsDto = comments.Select(comment => _commentMapper.CommentToCommentDto(comment)).ToArray();
-
-        return commentsDto;
+        return await _mediator.Send(new GetPositiveArticlesQuery { rateGreaterThan = rateGreaterThan });
     }
 
     public async Task UpdateArticleDescription(Dictionary<Guid, string> ArticlesData)

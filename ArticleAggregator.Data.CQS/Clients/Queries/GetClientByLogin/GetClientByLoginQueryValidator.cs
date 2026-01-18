@@ -2,7 +2,7 @@
 
 namespace ArticleAggregator.Data.CQS.Clients.Queries.GetClientByLogin;
 
-public class GetClientByLoginQueryValidator: AbstractValidator<GetClientByLoginQuery>
+public class GetClientByLoginQueryValidator : AbstractValidator<GetClientByLoginQuery>
 {
     public GetClientByLoginQueryValidator()
     {

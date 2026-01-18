@@ -1,5 +1,4 @@
-﻿using ArticleAggregator.Core.Models;
-using ArticleAggregator.Mapping;
+﻿using ArticleAggregator.Core.Dto;
 using ArticleAggregator.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,18 +6,8 @@ namespace ArticleAggregator.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class RolesController : ControllerBase
+public class RolesController(IRoleService _roleService) : ControllerBase
 {
-    private readonly IRoleService _roleService;
-    private readonly RoleMapper _roleMapper;
-
-    public RolesController(IRoleService roleService,
-        RoleMapper roleMapper)
-    {
-        _roleService = roleService;
-        _roleMapper = roleMapper;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetAllRoles()
     {
@@ -41,10 +30,9 @@ public class RolesController : ControllerBase
     //}
 
     [HttpPost]
-    public async Task<IActionResult> CreateRole([FromBody] RoleModel roleModel)
+    public async Task<IActionResult> CreateRole([FromBody] RoleDto request)
     {
-        var dto = _roleMapper.RoleModelToRoleDto(roleModel);
-        await _roleService.CreateRole(dto);
+        await _roleService.CreateRole(request);
         return Ok();
     }
 

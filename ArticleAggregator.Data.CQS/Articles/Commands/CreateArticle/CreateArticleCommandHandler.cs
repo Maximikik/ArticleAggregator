@@ -1,32 +1,22 @@
-﻿using ArticleAggregator.Data.CustomExceptions;
+﻿using ArticleAggregator.Core.Dto;
+using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
+using ArticleAggregator_Repositories;
 using MediatR;
 
 namespace ArticleAggregator.Data.CQS.Articles.Commands.CreateArticle;
 
-public class CreateArticleCommandHandler : IRequestHandler<CreateArticleCommand>
+public class CreateArticleCommandHandler(IUnitOfWork unitOfWork, IMapper articleMapper) : IRequestHandler<CreateArticleCommand>
 {
-    private readonly ArticlesAggregatorDbContext _dbContext;
-    private readonly ArticleMapper _articleMapper;
-
-    public CreateArticleCommandHandler(ArticlesAggregatorDbContext dbContext,
-        ArticleMapper articleMapper)
-    {
-        _dbContext = dbContext;
-        _articleMapper = articleMapper;
-    }
     public async Task Handle(CreateArticleCommand request, CancellationToken cancellationToken)
     {
-        _ = request.ArticleDto ?? throw new NotFoundException("ArticleDto");
+        var article = articleMapper.Map<ArticleDto, Article>(request.ArticleDto);
+        article.Id = Guid.NewGuid();
 
-        var article = _articleMapper.ArticleDtoToArticle(request.ArticleDto);
-
-        var categories = _dbContext.Categories.Where(c => request.ArticleDto.CategoriesId.Contains(c.Id)).ToList();
-
+        var categories = unitOfWork.CategoryRepository.FindBy(c => request.ArticleDto.CategoriesId.Contains(c.Id)).ToList();
         article.Categories = categories;
 
-        await _dbContext.Articles.AddAsync(article, cancellationToken);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await unitOfWork.ArticleRepository.InsertOne(article);
+        await unitOfWork.ArticleRepository.SaveChangesAsync();
     }
 }

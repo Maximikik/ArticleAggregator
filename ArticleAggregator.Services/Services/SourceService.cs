@@ -6,33 +6,18 @@ using ArticleAggregator.Data.CQS.Sources.Queries.GetArticlesOfSourceById;
 using ArticleAggregator.Data.CQS.Sources.Queries.GetArticlesOfSourceByName;
 using ArticleAggregator.Data.CQS.Sources.Queries.GetSourceById;
 using ArticleAggregator.Data.CQS.Sources.Queries.GetSourceByName;
+using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
-using ArticleAggregator_Repositories;
-using Hangfire;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 
-namespace ArticleAggregator.Services;
+namespace ArticleAggregator.Services.Services;
 
-public class SourceService : ISourceService
+public class SourceService(
+    IMapper mapper,
+    IMediator _mediator
+    ) : ISourceService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly SourceMapper _sourceMapper;
-    private readonly ArticleMapper _articleMapper;
-    private readonly IMediator _mediator;
-    private readonly IConfiguration _configuration;
-
-    public SourceService(IUnitOfWork unitOfWork,
-      SourceMapper sourceMapper, ArticleMapper articleMapper, IMediator mediator, IConfiguration configuration)
-    {
-        _unitOfWork = unitOfWork;
-        _sourceMapper = sourceMapper;
-        _articleMapper = articleMapper;
-        _mediator = mediator;
-        _configuration = configuration;
-    }
-
     public async Task CreateSource(SourceDto soruceDto)
     {
         var command = new CreateSourceCommand() { SourceDto = soruceDto };
@@ -54,7 +39,7 @@ public class SourceService : ISourceService
 
         sources.ForEach(source =>
         {
-            sourcesDto[sources.IndexOf(source)] = _sourceMapper.SourceToSourceDto(source);
+            sourcesDto[sources.IndexOf(source)] = mapper.Map<Source, SourceDto>(source);
         });
 
         return sourcesDto;
@@ -70,7 +55,7 @@ public class SourceService : ISourceService
 
         articles.ForEach(article =>
         {
-            articlesDto[articles.IndexOf(article)] = _articleMapper.ArticleToArticleDto(article);
+            articlesDto[articles.IndexOf(article)] = mapper.Map<Article, ArticleDto>(article);
         });
 
         return articlesDto;
@@ -86,7 +71,7 @@ public class SourceService : ISourceService
 
         articles.ForEach(article =>
         {
-            articlesDto[articles.IndexOf(article)] = _articleMapper.ArticleToArticleDto(article);
+            articlesDto[articles.IndexOf(article)] = mapper.Map<Article, ArticleDto>(article);
         });
 
         return articlesDto;
@@ -97,7 +82,7 @@ public class SourceService : ISourceService
         var command = new GetSourceByIdQuery() { Id = id };
 
         var source = await _mediator.Send(command);
-        var sourceDto = _sourceMapper.SourceToSourceDto(source);
+        var sourceDto = mapper.Map<Source, SourceDto>(source);
 
         return sourceDto;
     }
@@ -107,7 +92,7 @@ public class SourceService : ISourceService
         var command = new GetSourceByNameQuery() { Name = name };
 
         var source = await _mediator.Send(command);
-        var sourceDto = _sourceMapper.SourceToSourceDto(source);
+        var sourceDto = mapper.Map<Source, SourceDto>(source);
 
         return sourceDto;
     }

@@ -7,22 +7,15 @@ using ArticleAggregator_Repositories;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
-namespace ArticleAggregator.Services;
+namespace ArticleAggregator.Services.Services;
 
-public class CommentService : ICommentService
+public class CommentService(
+    IUnitOfWork _unitOfWork,
+IMapper _commentMapper,
+IMediator _mediator,
+IConfiguration _configuration
+    ) : ICommentService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly CommentMapper _commentMapper;
-    private readonly IMediator _mediator;
-    private readonly IConfiguration _configuration;
-    public CommentService(IUnitOfWork unitOfWork,
-      CommentMapper commentMapper, IMediator mediator, IConfiguration configuration)
-    {
-        _unitOfWork = unitOfWork;
-        _commentMapper = commentMapper;
-        _mediator = mediator;
-        _configuration = configuration;
-    }
     public async Task AddCommentToArticle(CommentDto commentDto)
     {
         var command = new AddCommentToArticleCommand

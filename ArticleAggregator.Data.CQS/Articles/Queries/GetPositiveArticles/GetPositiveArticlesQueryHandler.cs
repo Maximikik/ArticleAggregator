@@ -1,25 +1,21 @@
-﻿using ArticleAggregator.Data.CQS.Articles.Queries.GetPositive;
+﻿using ArticleAggregator.Core.Models;
+using ArticleAggregator.Data.CQS.Articles.Queries.GetPositive;
 using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Data.Entities;
+using ArticleAggregator.Mapping;
+using ArticleAggregator_Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArticleAggregator.Data.CQS.Articles.Queries.GetPositiveArticles;
 
-public class GetPositiveArticlesQueryHandler : IRequestHandler<GetPositiveArticlesQuery, List<Article>>
+public class GetPositiveArticlesQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetPositiveArticlesQuery, List<ArticleModel>>
 {
-    private readonly ArticlesAggregatorDbContext _dbContext;
-
-    public GetPositiveArticlesQueryHandler(ArticlesAggregatorDbContext dbContext)
+    public async Task<List<ArticleModel>> Handle(GetPositiveArticlesQuery request, CancellationToken cancellationToken)
     {
-        _dbContext = dbContext;
-    }
-
-    public async Task<List<Article>> Handle(GetPositiveArticlesQuery request, CancellationToken cancellationToken)
-    {
-        var articles = await _dbContext.Articles.Where(article => article.Rating >= request.rateGreaterThan).ToListAsync()
+        var articles = await unitOfWork.ArticleRepository.FindBy(article => article.Rating >= request.rateGreaterThan).ToListAsync()
             ?? throw new NotFoundException("Article");
 
-        return articles;
+        return articles.Select(mapper.Map<Article, ArticleModel>).ToList();
     }
 }

@@ -1,27 +1,17 @@
 ﻿using ArticleAggregator.Data.CustomExceptions;
 using ArticleAggregator.Data.Entities;
+using ArticleAggregator_Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace ArticleAggregator.Data.CQS.Articles.Commands.CreateArticleWithSource;
 
-public class CreateArticleWithSourceCommandHandler : IRequestHandler<CreateArticleWithSourceCommand>
+public class CreateArticleWithSourceCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateArticleWithSourceCommand>
 {
-    private readonly ArticlesAggregatorDbContext _dbContext;
-
-    public CreateArticleWithSourceCommandHandler(ArticlesAggregatorDbContext articlesAggregatorDbContext)
-    {
-        _dbContext = articlesAggregatorDbContext;
-    }
 
     public async Task Handle(CreateArticleWithSourceCommand request, CancellationToken cancellationToken)
     {
-        var isSourceExists = await _dbContext.Sources.AnyAsync(source => source.Id.Equals(request.ArticleSourceId), cancellationToken);
-
-        if (!isSourceExists)
-        {
-            throw new NotFoundException("Source", request.ArticleSourceId);
-        }
+        _ = await unitOfWork.SourceRepository.GetById(request.ArticleSourceId)
+            ?? throw new NotFoundException("Source", request.ArticleSourceId);
 
         var article = new Article
         {
@@ -31,7 +21,7 @@ public class CreateArticleWithSourceCommandHandler : IRequestHandler<CreateArtic
             ArticleSourceId = request.ArticleSourceId
         };
 
-        await _dbContext.Articles.AddAsync(article, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await unitOfWork.ArticleRepository.InsertOne(article);
+        await unitOfWork.ArticleRepository.SaveChangesAsync();
     }
 }

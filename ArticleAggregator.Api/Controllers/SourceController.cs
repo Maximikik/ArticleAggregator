@@ -1,4 +1,4 @@
-﻿using ArticleAggregator.Core.Models;
+﻿using ArticleAggregator.Core.Dto;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -7,18 +7,8 @@ namespace ArticleAggregator.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SourceController : ControllerBase
+public class SourceController(ISourceService _sourceController, IMapper mapper) : ControllerBase
 {
-    private readonly ISourceService _sourceController;
-    private readonly SourceMapper _sourceMapper;
-
-    public SourceController(ISourceService sourceService,
-        SourceMapper sourceMapper)
-    {
-        _sourceController = sourceService;
-        _sourceMapper = sourceMapper;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetAllSources()
     {
@@ -56,10 +46,8 @@ public class SourceController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateSource([FromBody] SourceModel sourceModel)
+    public async Task<IActionResult> CreateSource([FromBody] SourceDto dto)
     {
-        var dto = _sourceMapper.SourceModelToSourceDto(sourceModel);
-
         await _sourceController.CreateSource(dto);
 
         return Ok();

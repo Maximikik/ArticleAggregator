@@ -1,25 +1,18 @@
-﻿using ArticleAggregator.Data.CustomExceptions;
+﻿using ArticleAggregator.Core.Dto;
+using ArticleAggregator.Data.CustomExceptions;
+using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
 using MediatR;
 
 namespace ArticleAggregator.Data.CQS.Sources.Commands.CreateSource;
 
-public class CreateSourceCommandHandler : IRequestHandler<CreateSourceCommand>
+public class CreateSourceCommandHandler(ArticlesAggregatorDbContext _dbContext, IMapper mapper) : IRequestHandler<CreateSourceCommand>
 {
-    private readonly ArticlesAggregatorDbContext _dbContext;
-    private readonly SourceMapper _sourceMapper;
-
-    public CreateSourceCommandHandler(ArticlesAggregatorDbContext dbContext, SourceMapper sourceMapper)
-    {
-        _dbContext = dbContext;
-        _sourceMapper = sourceMapper;
-    }
-
     public async Task Handle(CreateSourceCommand request, CancellationToken cancellationToken)
     {
         _ = request.SourceDto ?? throw new NotFoundException("Source");
 
-        var source = _sourceMapper.SourceDtoToSource(request.SourceDto);
+        var source = mapper.Map<SourceDto, Source>(request.SourceDto);
 
         var articles = _dbContext.Articles.Where(article => request.SourceDto.ArticlesId.Contains(article.Id)).ToList();
 

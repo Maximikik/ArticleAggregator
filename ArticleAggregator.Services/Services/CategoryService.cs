@@ -5,29 +5,17 @@ using ArticleAggregator.Data.CQS.Categories.Commands.DeleteCategoryByName;
 using ArticleAggregator.Data.CQS.Categories.Queries.GetAllCategories;
 using ArticleAggregator.Data.CQS.Categories.Queries.GetCategoryById;
 using ArticleAggregator.Data.CQS.Categories.Queries.GetCategoryByName;
+using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
-namespace ArticleAggregator.Services;
+namespace ArticleAggregator.Services.Services;
 
-public class CategoryService : ICategoryService
+public class CategoryService(IUnitOfWork _unitOfWork, IMapper mapper, IMediator _mediator, IConfiguration _configuration) : ICategoryService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly CategoryMapper _categoryMapper;
-    private readonly IMediator _mediator;
-    private readonly IConfiguration _configuration;
-    public CategoryService(IUnitOfWork unitOfWork,
-      CategoryMapper categoryMapper, IMediator mediator, IConfiguration configuration)
-    {
-        _unitOfWork = unitOfWork;
-        _categoryMapper = categoryMapper;
-        _mediator = mediator;
-        _configuration = configuration;
-    }
-
     public async Task CreateCategory(CategoryDto dto)
     {
         var command = new CreateCategoryCommand() { CategoryDto = dto };
@@ -54,7 +42,7 @@ public class CategoryService : ICategoryService
 
         categories.ForEach(category =>
         {
-            categoriesDto[categories.IndexOf(category)] = _categoryMapper.CategoryToCategoryDto(category);
+            categoriesDto[categories.IndexOf(category)] = mapper.Map<Category, CategoryDto>(category);
         });
 
         return categoriesDto;
@@ -65,7 +53,7 @@ public class CategoryService : ICategoryService
         var command = new GetCategoryByIdQuery() { Id = id };
         var category = await _mediator.Send(command);
 
-        var categoryDto = _categoryMapper.CategoryToCategoryDto(category);
+        var categoryDto = mapper.Map<Category, CategoryDto>(category);
 
         return categoryDto;
     }
@@ -75,7 +63,7 @@ public class CategoryService : ICategoryService
         var command = new GetCategoryByNameQuery() { Name = name };
         var category = await _mediator.Send(command);
 
-        var categoryDto = _categoryMapper.CategoryToCategoryDto(category);
+        var categoryDto = mapper.Map<Category, CategoryDto>(category);
 
         return categoryDto;
     }

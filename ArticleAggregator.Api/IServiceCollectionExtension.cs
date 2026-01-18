@@ -3,8 +3,8 @@ using ArticleAggregator.Data;
 using ArticleAggregator.Data.CQS.Articles.Commands.CreateArticle;
 using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
-using ArticleAggregator.Services;
 using ArticleAggregator.Services.Interfaces;
+using ArticleAggregator.Services.Services;
 using ArticleAggregator_Repositories;
 using ArticleAggregator_Repositories.Interfaces;
 using ArticleAggregator_Repositories.Repositories;
@@ -56,13 +56,7 @@ public static class IServiceCollectionExtension
 
         services.AddScoped<RssReader>();
 
-        services.AddScoped<ArticleMapper>();
-        services.AddScoped<CategoryMapper>();
-        services.AddScoped<ClientMapper>();
-        services.AddScoped<SourceMapper>();
-        services.AddScoped<CommentMapper>();
-        services.AddScoped<RoleMapper>();
-        services.AddScoped<FeedMapper>();
+        services.AddScoped<IMapper, Mapper>();
 
         services.AddHangfire(configuration => configuration
            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)

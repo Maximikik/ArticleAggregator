@@ -1,5 +1,4 @@
-﻿using ArticleAggregator.Data.CQS.Articles.Queries.GetArticleById;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace ArticleAggregator.Data.CQS.Articles.Queries.GetArticleTextById;
 

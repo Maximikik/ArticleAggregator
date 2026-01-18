@@ -6,7 +6,7 @@ public class UpdateRoleByIdCommandValidator : AbstractValidator<UpdateRoleByIdCo
 {
     public UpdateRoleByIdCommandValidator()
     {
-        RuleFor(item  => item.Id).NotEmpty();
-        RuleFor(item  => item.Name).NotNull();
+        RuleFor(item => item.Id).NotEmpty();
+        RuleFor(item => item.Name).NotNull();
     }
 }

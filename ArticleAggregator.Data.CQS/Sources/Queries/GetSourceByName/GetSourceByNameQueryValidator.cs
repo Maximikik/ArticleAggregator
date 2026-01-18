@@ -2,7 +2,7 @@
 
 namespace ArticleAggregator.Data.CQS.Sources.Queries.GetSourceByName;
 
-public  class GetSourceByNameQueryValidator : AbstractValidator<GetSourceByNameQuery>
+public class GetSourceByNameQueryValidator : AbstractValidator<GetSourceByNameQuery>
 {
     public GetSourceByNameQueryValidator()
     {

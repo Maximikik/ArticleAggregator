@@ -1,5 +1,4 @@
 ﻿using ArticleAggregator.Core.Dto;
-using ArticleAggregator.Mapping;
 using FeedAggregator.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +6,7 @@ namespace ArticleAggregator.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class FeedController(IFeedService _feedService, FeedMapper _feedMapper) : ControllerBase
+public class FeedController(IFeedService _feedService) : ControllerBase
 {
     [HttpGet("{id}")]
     public async Task<IActionResult> GetFeedById(Guid id)

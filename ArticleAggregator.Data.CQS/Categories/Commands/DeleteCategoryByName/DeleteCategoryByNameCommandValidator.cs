@@ -6,6 +6,6 @@ public class DeleteCategoryByNameCommandValidator : AbstractValidator<DeleteCate
 {
     public DeleteCategoryByNameCommandValidator()
     {
-        RuleFor(item => item.Name).NotNull();  
+        RuleFor(item => item.Name).NotNull();
     }
 }

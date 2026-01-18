@@ -1,24 +1,18 @@
 ﻿using ArticleAggregator.Data.CustomExceptions;
+using ArticleAggregator_Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace ArticleAggregator.Data.CQS.Articles.Commands.SetArticleRate;
 
-public class SetArticleRateCommandHandler : IRequestHandler<SetArticleRateCommand>
+public class SetArticleRateCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<SetArticleRateCommand>
 {
-    private readonly ArticlesAggregatorDbContext _dbContext;
-
-    public SetArticleRateCommandHandler(ArticlesAggregatorDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
     public async Task Handle(SetArticleRateCommand request, CancellationToken cancellationToken)
     {
-        var article = await _dbContext.Articles.FirstOrDefaultAsync(article => article.Id.Equals(request.Id), cancellationToken)
+        var article = await unitOfWork.ArticleRepository.GetById(request.Id)
             ?? throw new NotFoundException("Article", request.Id);
 
         article.Rating = request.Rate;
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await unitOfWork.ArticleRepository.SaveChangesAsync();
     }
 }

@@ -1,5 +1,4 @@
-﻿    using ArticleAggregator.Core.Models;
-using ArticleAggregator.Mapping;
+﻿using ArticleAggregator.Core.Dto;
 using ArticleAggregator.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,18 +6,8 @@ namespace ArticleAggregator.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CategoriesController : ControllerBase
+public class CategoriesController(ICategoryService _categoryService) : ControllerBase
 {
-    private readonly ICategoryService _categoryService;
-    private readonly CategoryMapper _categoryMapper;
-
-    public CategoriesController(ICategoryService categoryService,
-        CategoryMapper categoryMapper)
-    {
-        _categoryService = categoryService;
-        _categoryMapper = categoryMapper;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetAllCategories()
     {
@@ -41,11 +30,9 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCategory([FromBody] CategoryModel categoryModel)
+    public async Task<IActionResult> CreateCategory([FromBody] CategoryDto request)
     {
-        var dto = _categoryMapper.CategoryModelToCategoryDto(categoryModel);
-
-        await _categoryService.CreateCategory(dto);
+        await _categoryService.CreateCategory(request);
 
         return Ok();
     }

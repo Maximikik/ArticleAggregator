@@ -1,7 +1,7 @@
 ﻿using ArticleAggregator.Data.Entities;
 using MediatR;
 
-namespace ArticleAggregator.Services
+namespace ArticleAggregator.Services.Services
 {
     internal class GetRefreshTokenQuery : IRequest<RefreshToken>
     {

@@ -1,65 +1,38 @@
-﻿using ArticleAggregator.Core.Models;
-using ArticleAggregator.Data.Entities;
-using ArticleAggregator.Mapping;
+﻿using ArticleAggregator.Core.Dto;
 using ArticleAggregator.Services.Interfaces;
 using Hangfire;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace ArticleAggregator.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ArticlesController : ControllerBase
+public class ArticlesController(IArticleService _articleService) : ControllerBase
 {
-    private readonly IArticleService _articleService;
-    private readonly ArticleMapper _articleMapper;
-
-    public ArticlesController(IArticleService articleService,
-        ArticleMapper articleMapper)
-    {
-        _articleService = articleService;
-        _articleMapper = articleMapper;
-    }
-
     [HttpGet("ById")]
     public async Task<IActionResult> GetArticleById(Guid id)
     {
-        var articleDto = await _articleService.GetArticleById(id);
-        var article = _articleMapper.ArticleDtoToArticle(articleDto!);
-
-        return Ok(article);
+        return Ok(await _articleService.GetArticleById(id));
     }
 
     [HttpGet]
     // [Authorize(Roles = "User")]
     public async Task<IActionResult> GetAll()
     {
-        var articlesDto = await _articleService.GetAll();
-
-        var articles = articlesDto!.Select(dto => _articleMapper.ArticleDtoToArticle(dto));
-
-        return Ok(articles);
+        return Ok(await _articleService.GetAll());
     }
 
     [HttpGet("Positive")]
-   // [Authorize(Roles = "User")]
+    // [Authorize(Roles = "User")]
     public async Task<IActionResult> GetPositiveArticles([FromBody] int rateGreaterThan)
     {
-        var articlesDto = await _articleService.GetPositiveArticles(rateGreaterThan);
-
-        var articles = articlesDto!.Select(dto => _articleMapper.ArticleDtoToArticle(dto));
-
-        return Ok(articles);
+        return Ok(await _articleService.GetPositiveArticles(rateGreaterThan));
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateArticle(ArticleModel request)
+    public async Task<IActionResult> CreateArticle(ArticleDto request)
     {
-        var dto = _articleMapper.ArticleModelToArticleDto(request);
-
-        await _articleService.CreateArticle(dto);
+        await _articleService.CreateArticle(request);
 
         string urlToResourse = "";
         return Created(urlToResourse, null);
@@ -71,7 +44,7 @@ public class ArticlesController : ControllerBase
         await _articleService.InsertArticlesFromRssByArticleSourceId(sourceId);
 
         RecurringJob.AddOrUpdate(
-        "TestRecurringJob",
+        "RssJob",
             () => _articleService.InsertArticlesFromRssByArticleSourceId(sourceId), "0 0 * * *");
 
         string urlToResourse = "";

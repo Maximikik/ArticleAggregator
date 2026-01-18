@@ -6,29 +6,22 @@ using ArticleAggregator.Data.CQS.Roles.Commands.UpdateRoleById;
 using ArticleAggregator.Data.CQS.Roles.Queries.GetAllRoles;
 using ArticleAggregator.Data.CQS.Roles.Queries.GetRoleById;
 using ArticleAggregator.Data.CQS.Roles.Queries.GetRoleByName;
+using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
 using ArticleAggregator.Services.Interfaces;
 using ArticleAggregator_Repositories;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
-namespace ArticleAggregator.Services;
+namespace ArticleAggregator.Services.Services;
 
-public class RoleService : IRoleService
+public class RoleService(
+    IUnitOfWork _unitOfWork,
+    IMapper mapper,
+    IMediator _mediator,
+    IConfiguration _configuration
+    ) : IRoleService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly RoleMapper _roleMapper;
-    private readonly IMediator _mediator;
-    private readonly IConfiguration _configuration;
-    public RoleService(IUnitOfWork unitOfWork,
-      RoleMapper roleMapper, IMediator mediator, IConfiguration configuration)
-    {
-        _unitOfWork = unitOfWork;
-        _roleMapper = roleMapper;
-        _mediator = mediator;
-        _configuration = configuration;
-    }
-
     public async Task CreateRole(RoleDto roleDto)
     {
         var command = new CreateRoleCommand() { RoleDto = roleDto };
@@ -58,7 +51,7 @@ public class RoleService : IRoleService
 
         roles.ForEach(role =>
         {
-            rolesDto[roles.IndexOf(role)] = _roleMapper.RoleToRoleDto(role);
+            rolesDto[roles.IndexOf(role)] = mapper.Map<Role, RoleDto>(role);
         });
 
         return rolesDto;
@@ -69,7 +62,7 @@ public class RoleService : IRoleService
         var command = new GetRoleByIdQuery() { Id = id };
 
         var role = await _mediator.Send(command);
-        var roleDto = _roleMapper.RoleToRoleDto(role);
+        var roleDto = mapper.Map<Role, RoleDto>(role);
 
         return roleDto;
     }
@@ -79,7 +72,7 @@ public class RoleService : IRoleService
         var command = new GetRoleByNameQuery() { Name = name };
 
         var role = await _mediator.Send(command);
-        var roleDto = _roleMapper.RoleToRoleDto(role);
+        var roleDto = mapper.Map<Role, RoleDto>(role);
 
         return roleDto;
     }

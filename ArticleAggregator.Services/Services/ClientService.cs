@@ -1,4 +1,5 @@
 ﻿using ArticleAggregator.Core.Dto;
+using ArticleAggregator.Core.Models;
 using ArticleAggregator.Data.CQS.Clients.Queries.GetClientById;
 using ArticleAggregator.Data.CQS.Clients.Queries.GetClientByLogin;
 using ArticleAggregator.Data.CQS.Clients.Queries.GetClientByRefreshToken;
@@ -14,24 +15,13 @@ using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
-namespace ArticleAggregator.Services;
+namespace ArticleAggregator.Services.Services;
 
-public class ClientService : IClientService
+public class ClientService(IUnitOfWork _unitOfWork,
+                          IConfiguration _configuration,
+                           IMapper _mapper,
+                           IMediator _mediator) : IClientService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IConfiguration _configuration;
-    private readonly ClientMapper _clientMapper;
-    private readonly IMediator _mediator;
-
-    public ClientService(IUnitOfWork unitOfWork, IConfiguration configuration, ClientMapper clientMapper,
-        IMediator mediator)
-    {
-        _unitOfWork = unitOfWork;
-        _configuration = configuration;
-        _clientMapper = clientMapper;
-        _mediator = mediator;
-    }
-
     public async Task<ClaimsIdentity> Authenticate(string userName)
     {
         var client = await _unitOfWork.ClientRepository
@@ -100,56 +90,56 @@ public class ClientService : IClientService
         await _unitOfWork.Commit();
     }
 
-    public async Task<ClientDto[]?> GetAllClients()
+    public async Task<ClientModel[]> GetAllClients()
     {
         var clients = await _unitOfWork.ClientRepository.GetAll();
 
-        var clientsDto = new ClientDto[clients.Count()];
+        var clientsModel = new ClientModel[clients.Count()];
 
         clients.ForEach(client =>
         {
-            clientsDto[clients.IndexOf(client)] = _clientMapper.ClientToClientDto(client);
+            clientsModel[clients.IndexOf(client)] = _mapper.Map<Client, ClientModel>(client);
         });
 
-        return clientsDto;
+        return clientsModel;
     }
 
-    public async Task<ClientDto[]?> GetClientsByRole(string roleName)
+    public async Task<ClientModel[]> GetClientsByRole(string roleName)
     {
         var request = new GetClientsByRoleQuery { roleName = roleName };
         var client = await _mediator.Send(request);
 
-        var clientsDto = client.Select(client => _clientMapper.ClientToClientDto(client)).ToArray();
+        var clientModel = client.Select(_mapper.Map<Client, ClientModel>).ToArray();
 
-        return clientsDto;
+        return clientModel;
     }
 
-    public async Task<ClientDto?> GetClientById(Guid id)
+    public async Task<ClientModel> GetClientById(Guid id)
     {
         var client = await _mediator.Send(new GetClientByIdQuery { Id = id })
             ?? throw new NotFoundException("Client", id);
 
-        var clientDto = _clientMapper.ClientToClientDto(client);
+        var clientModel = _mapper.Map<Client, ClientModel>(client);
 
-        return clientDto;
+        return clientModel;
     }
 
-    public async Task<ClientDto?> GetClientByLogin(string login)
+    public async Task<ClientModel> GetClientByLogin(string login)
     {
         var client = await _mediator.Send(new GetClientByLoginQuery { Login = login })
             ?? throw new NotFoundException("Client", login);
 
-        var clientDto = _clientMapper.ClientToClientDto(client);
+        var clientModel = _mapper.Map<Client, ClientModel>(client);
 
-        return clientDto;
+        return clientModel;
     }
 
-    public async Task<ClientDto> GetClientByRefreshToken(Guid refreshToken)
+    public async Task<ClientModel> GetClientByRefreshToken(Guid refreshToken)
     {
         var user = await _mediator.Send(new GetClientByRefreshTokenQuery { RefreshTokenId = refreshToken });
 
-        var dto = _clientMapper.ClientToClientDto(user);
-        return dto;
+        var clientModel = _mapper.Map<Client, ClientModel>(user);
+        return clientModel;
     }
 
     public async Task<bool> IsAdmin(string email)
@@ -184,6 +174,4 @@ public class ClientService : IClientService
             return Convert.ToHexString(hashBytes);
         }
     }
-
-
 }

@@ -5,18 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArticleAggregator.Data.CQS.Categories.Commands.DeleteCategoryByName;
 
-public class DeleteCategoryByNameCommandHandler : IRequestHandler<DeleteCategoryByNameCommand>
+public class DeleteCategoryByNameCommandHandler(ArticlesAggregatorDbContext _dbContext, IMapper _mapper) : IRequestHandler<DeleteCategoryByNameCommand>
 {
-    private readonly ArticlesAggregatorDbContext _dbContext;
-    private readonly CategoryMapper _mapper;
-
-    public DeleteCategoryByNameCommandHandler(ArticlesAggregatorDbContext dbContext,
-        CategoryMapper mapper)
-    {
-        _dbContext = dbContext;
-        _mapper = mapper;
-    }
-
     public async Task Handle(DeleteCategoryByNameCommand request, CancellationToken cancellationToken)
     {
         var categoryToDelete = await _dbContext.Categories.FirstOrDefaultAsync(

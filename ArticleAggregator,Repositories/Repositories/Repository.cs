@@ -158,4 +158,9 @@ public class Repository<T> : IRepository<T> where T : class, IBaseEntity
 
         return rate;
     }
+
+    public async Task<int> SaveChangesAsync()
+    {
+        return await _dbContext.SaveChangesAsync();
+    }
 }

@@ -1,15 +1,16 @@
 ﻿using ArticleAggregator.Core.Dto;
+using ArticleAggregator.Data.Entities;
 using ArticleAggregator.Mapping;
 using ArticleAggregator_Repositories;
 using FeedAggregator.Services.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
-namespace ArticleAggregator.Services;
+namespace ArticleAggregator.Services.Services;
 
 public class FeedService(
     IUnitOfWork _unitOfWork,
-    FeedMapper _feedMapper,
+    IMapper _mapper,
     IMediator _mediator,
     IConfiguration _configuration) : IFeedService
 {
@@ -18,12 +19,12 @@ public class FeedService(
         var feed = await _unitOfWork.FeedRepository.AddArticleToFeed(articleId, feedId);
         await _unitOfWork.Commit();
 
-        return _feedMapper.EntityToDto(feed);
+        return _mapper.Map<Feed, FeedDto>(feed);
     }
 
     public async Task CreateFeed(FeedDto dto)
     {
-        await _unitOfWork.FeedRepository.InsertOne(_feedMapper.DtoToEntity(dto));
+        await _unitOfWork.FeedRepository.InsertOne(_mapper.Map<FeedDto, Feed>(dto));
         await _unitOfWork.Commit();
     }
 
@@ -37,7 +38,7 @@ public class FeedService(
     {
         var feeds = await _unitOfWork.FeedRepository.GetAll();
 
-        return feeds.Select(_feedMapper.EntityToDto);
+        return feeds.Select(_mapper.Map<Feed, FeedDto>);
     }
 
     public async Task<FeedDto?> GetFeedById(Guid id)
@@ -45,7 +46,7 @@ public class FeedService(
         var feed = await _unitOfWork.FeedRepository.GetFeedWithArticles(id)
             ?? throw new Exception("feed is not found");
 
-        return _feedMapper.EntityToDto(feed);
+        return _mapper.Map<Feed, FeedDto>(feed);
     }
 
     public Task<FeedDto?> GetFeedByTitle(string name)
@@ -63,6 +64,6 @@ public class FeedService(
         var feed = await _unitOfWork.FeedRepository.RemoveArticleFromFeed(articleId, feedId);
         await _unitOfWork.Commit();
 
-        return _feedMapper.EntityToDto(feed);
+        return _mapper.Map<Feed, FeedDto>(feed);
     }
 }
